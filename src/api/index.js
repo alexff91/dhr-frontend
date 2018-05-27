@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BACKEND_URL = 'https://168.63.13.234:8080';
+const BACKEND_URL = 'http://168.63.13.234:8080';
 
 const http = axios.create({
   baseURL: `${BACKEND_URL}/api/v1`
@@ -42,8 +42,8 @@ export const Responds = (() => {
 })();
 
 export const Recordings = (() => {
-  const upload = (file) => {
-    return http.post(`/vacancy/1/responds/1/questions/1`, file);
+  const upload = (file, questionId) => {
+    return http.post(`/vacancy/1/responds/cf3fd9c7/questions/`+questionId, file);
   };
   return {
     upload

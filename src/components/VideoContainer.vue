@@ -23,6 +23,9 @@
     props: {
       'durationMax': {
         type: Number
+      },
+      'questionId': {
+        type: Number
       }
     },
     data() {
@@ -75,7 +78,7 @@
       saveRecord() {
         const videoFile = new FormData();
         videoFile.append('file', this.recorder.blob, this.recorder.id + '.webm');
-        Recordings.upload(videoFile);
+        Recordings.upload(videoFile, this.questionId);
       },
 
       showPreview() {
