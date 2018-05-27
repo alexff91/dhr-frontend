@@ -90,7 +90,6 @@
 </script>
 
 <style lang="scss">
-
     .video-container-wrap {
         float: right;
     }
