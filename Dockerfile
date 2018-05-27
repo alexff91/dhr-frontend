@@ -16,6 +16,6 @@ RUN npm install
 COPY . .
 
 
-EXPOSE 8080
+EXPOSE 443
 
-CMD [ "npm", "run", "serve" ]
+CMD [ "npm", "run", "serve", "--https", "--port", "443"]
