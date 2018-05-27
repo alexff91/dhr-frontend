@@ -23,6 +23,9 @@
     props: {
       'durationMax': {
         type: Number
+      },
+      'questionId': {
+        type: Number
       }
     },
     data() {
