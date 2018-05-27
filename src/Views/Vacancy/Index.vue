@@ -71,7 +71,7 @@
 
                                 <VideoContainer :durationMax="this.currentQuestion.durationMax"
                                                 :questionId="this.currentQuestion.id"
-                                                :respondId="cf3fd9c7"
+                                                :respondId="1"
                                                 :vacancyId="this.vacancyId"
                                 ></VideoContainer>
                             </div>
