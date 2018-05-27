@@ -86,21 +86,13 @@
   };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 
     .video-container-wrap {
         float: right;
     }
 
-    .video-container {
-
-        > * {
-            border: 4px solid rebeccapurple;
-        }
-
-        video {
-            width: 50%;
-
-        }
+    video {
+        border: 4px solid rebeccapurple;
     }
 </style>
