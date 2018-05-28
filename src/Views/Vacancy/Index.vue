@@ -18,10 +18,10 @@
 
                     <div class="step-view text-center">
                         <slot v-if="activeStep === 0">
-                            <h1 class="text-center">Видеоинтервью на позицию {{ this.vacancy.position }}</h1>
+                            <h1 class="text-center">Видеоинтервью на позицию {{ vacancy.position }}</h1>
 
                             <div class="vacancy-description">
-                                <p v-html="this.vacancy.description"></p>
+                                <p v-html="vacancy.description"></p>
                             </div>
 
                             <el-button type="primary" @click="nextStep">Продолжить</el-button>
@@ -65,23 +65,10 @@
 
 
                         <div class="respond-wrap" v-if="activeStep === 2">
-                            <div class="questions-list">
-                                Вопрос {{this.currentQuestionIndex + 1}} из {{ this.questions.length }}
-                            </div>
-
-                            <div class="question-wrap text-left">
-                                {{ this.currentQuestion.question }} <br>
-
-                                <VideoContainer :durationMax="this.currentQuestion.durationMax"
-                                                :questionId="this.currentQuestion.id"
-                                                :respondId="this.respondId"
-                                                :vacancyId="this.vacancyId"
-                                ></VideoContainer>
-                            </div>
-
-
+                            <Questionnaire :questions="vacancy.questions"
+                                           :respondQuestions="respond.respondQuestions"
+                                           :respondId="respond.respondId"></Questionnaire>
                         </div>
-
                     </div>
                 </el-main>
             </el-container>
@@ -94,10 +81,11 @@
 <script>
   import VideoContainer from '../../components/VideoContainer';
   import { Vacancies, Companies, Responds } from '../../api';
+  import Questionnaire from '../../components/Questionnaire';
 
   export default {
     name: 'Index',
-    components: {VideoContainer},
+    components: {Questionnaire, VideoContainer},
     data() {
       return {
         activeStep: 0,
@@ -109,27 +97,20 @@
         vacancy: {},
         company: {},
         questions: [],
-        currentQuestion: null,
-        respondId: null
+        respond: {}
       };
     },
     computed: {
       vacancyId() {
         return this.$route.params.vacancyId;
-      },
-      currentQuestionIndex() {
-        return this.questions.indexOf(this.currentQuestion);
       }
     },
     created() {
-
-
       // TODO: нужно дергать по vacancy id
       Vacancies.get()
         .then(res => {
           this.vacancy = res.data[0];
           this.questions = this.vacancy.questions;
-          this.currentQuestion = this.questions[0];
         });
       // Vacancies.getQuestions(this.vacancyId);
 
@@ -156,7 +137,7 @@
               lastName: formModel.lastName
             })
               .then(res => {
-                this.respondId = res.data.respondId;
+                this.respond = res.data;
               });
 
             this.activeStep++;
