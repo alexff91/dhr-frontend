@@ -15,7 +15,4 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-
-EXPOSE 443
-
-CMD [ "npm", "run", "serve", "--https", "--port", "443"]
+CMD [ "npm", "run", "build"]
