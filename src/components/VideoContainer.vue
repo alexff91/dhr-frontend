@@ -3,7 +3,10 @@
         <div ref="video-recorder" class="video-container"></div>
         <div ref="video-preview" class="video-container"></div>
         <div class="video-controls">
-            {{ durationMax / 1000 }} сек.
+
+            {{ readableDuration(durationMax) }}
+
+            <!--{{ durationMax / 1000 }} сек.-->
             <el-button v-if="!isRecording && !answered" @click="startRecording" type="primary">Начать запись</el-button>
             <el-button v-if="isRecording" @click="stopRecording" type="primary">Закончить запись</el-button>
         </div>
@@ -15,6 +18,7 @@
   /* eslint-disable */
   import * as OV from 'openvidu-browser';
   import { Recordings } from '../../src/api';
+  import { parseMillisecondsIntoReadableTime } from '../utils';
 
   const VIDU = new OV.OpenVidu();
 
@@ -23,6 +27,9 @@
     props: {
       'durationMax': {
         type: Number
+      },
+      'respondId': {
+        type: String
       },
       'questionId': {
         type: Number
@@ -37,6 +44,8 @@
         answered: false
       };
     },
+
+    computed: {},
     mounted() {
 
       this.publisher = VIDU.initPublisher(this.$refs['video-recorder'], {
@@ -78,12 +87,16 @@
       saveRecord() {
         const videoFile = new FormData();
         videoFile.append('file', this.recorder.blob, this.recorder.id + '.webm');
-        Recordings.upload(videoFile, this.questionId);
+        Recordings.upload(videoFile, this.respondId, this.questionId);
       },
 
       showPreview() {
         const recordingPreview = this.recorder.preview(this.$refs['video-preview']);
         recordingPreview.controls = true;
+      },
+
+      readableDuration(ms) {
+        return parseMillisecondsIntoReadableTime(ms);
       }
     }
   };

@@ -3,9 +3,12 @@
         <el-col :xs="24" :sm="22" :md="18" :lg="16" :xl="14" class="main-col">
             <el-container>
                 <el-header class="vacancy-header" height="80px">
-                    <div class="company-logo">{{ company.companyName }}</div>
-
+                    <div class="company-logo">
+                        <img v-if="company.companyLogoPath" :src="company.companyLogoPath">
+                        <span v-if="!company.companyLogoPath">{{ company.companyName }}</span>
+                    </div>
                 </el-header>
+
                 <el-main>
                     <el-steps :active="activeStep" finish-status="success" align-center class="steps-wrap">
                         <el-step title="Вакансия"></el-step>
@@ -18,7 +21,7 @@
                             <h1 class="text-center">Видеоинтервью на позицию {{ this.vacancy.position }}</h1>
 
                             <div class="vacancy-description">
-                                <p>{{ this.vacancy.description }}</p>
+                                <p v-html="this.vacancy.description"></p>
                             </div>
 
                             <el-button type="primary" @click="nextStep">Продолжить</el-button>
@@ -53,7 +56,7 @@
                                         </el-form-item>
 
                                         <br>
-                                        <el-button type="primary" @click="nextStep">Продолжить</el-button>
+                                        <el-button type="primary" @click="sendForm">Продолжить</el-button>
                                     </el-form>
                                 </el-col>
                             </el-row>
@@ -71,7 +74,7 @@
 
                                 <VideoContainer :durationMax="this.currentQuestion.durationMax"
                                                 :questionId="this.currentQuestion.id"
-                                                :respondId="1"
+                                                :respondId="this.respondId"
                                                 :vacancyId="this.vacancyId"
                                 ></VideoContainer>
                             </div>
@@ -90,7 +93,7 @@
 
 <script>
   import VideoContainer from '../../components/VideoContainer';
-  import { Vacancies, Companies } from '../../api';
+  import { Vacancies, Companies, Responds } from '../../api';
 
   export default {
     name: 'Index',
@@ -106,7 +109,8 @@
         vacancy: {},
         company: {},
         questions: [],
-        currentQuestion: null
+        currentQuestion: null,
+        respondId: null
       };
     },
     computed: {
@@ -137,17 +141,27 @@
     },
     methods: {
       nextStep() {
-        if (this.activeStep === 1) {
-          this.$refs['form'].validate((valid) => {
-            // if (valid) {
-            this.activeStep++;
-            // }
-          });
-        }
-
         if (this.activeStep === 0) {
           this.activeStep++;
         }
+      },
+      sendForm() {
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            const formModel = this.$refs['form'].model;
+
+            Responds.createRespond(this.vacancyId, {
+              email: formModel.email,
+              name: formModel.name,
+              lastName: formModel.lastName
+            })
+              .then(res => {
+                this.respondId = res.data.respondId;
+              });
+
+            this.activeStep++;
+          }
+        });
       }
     }
 
@@ -160,8 +174,18 @@
     }
 
     .company-logo {
-        font-weight: bold;
-        font-size: 2rem;
+        line-height: 80px;
+
+        span {
+            font-weight: bold;
+            font-size: 2rem;
+        }
+
+        img {
+            max-width: 175px;
+            max-height: 80px;
+            vertical-align: middle;
+        }
     }
 
     .main-col {
@@ -174,6 +198,7 @@
 
     .vacancy-description {
         margin-bottom: 4rem;
+        text-align: left;
     }
 
     .form-description {
