@@ -6,12 +6,12 @@ export const parseMillisecondsIntoReadableTime = (milliseconds, showHours) => {
 
   //Get remainder from hours and convert to minutes
   const minutes = (hours - absoluteHours) * 60;
-  const absoluteMinutes = Math.floor(minutes);
+  const absoluteMinutes = Math.round(minutes);
   const m = absoluteMinutes > 9 ? absoluteMinutes : '0' + absoluteMinutes;
 
   //Get remainder from minutes and convert to seconds
   const seconds = (minutes - absoluteMinutes) * 60;
-  const absoluteSeconds = Math.floor(seconds);
+  const absoluteSeconds = Math.round(seconds);
   const s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
 
   if (showHours) {
