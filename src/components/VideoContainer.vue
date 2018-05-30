@@ -9,22 +9,36 @@
         <!--</div>-->
 
         <div class="video-controls">
-            <el-button v-if="!isRecording && !answered" @click="startRecording" type="text">
-                <span class="recorder-icon start-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path
-                            d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z" /></svg>
-                </span>
-                Начать запись
-                ({{ readableDuration(durationMax) }})
+            <el-button class="record-button" v-if="!isRecording && !answered && readyToRecord" @click="startRecording">
+                <i class="icon">
+                    <svg width="22" height="22" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg"
+                         xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <defs>
+                            <circle id="a" cx="11" cy="11" r="11"></circle>
+                            <mask id="b" x="0" y="0" width="22" height="22" fill="#fff">
+                                <use xlink:href="#a"></use>
+                            </mask>
+                        </defs>
+                        <g fill="none" fill-rule="evenodd">
+                            <use stroke="#CCC" mask="url(#b)" stroke-width="2" xlink:href="#a"></use>
+                            <circle fill="#F66" cx="11" cy="11" r="8"></circle>
+                            <circle fill="#FFF" cx="13.5" cy="8.5" r="1.5"></circle>
+                        </g>
+                    </svg>
+                </i>
+                <span>Начать запись ({{ readableDuration(durationMax) }})</span>
             </el-button>
-            <el-button v-if="isRecording" @click="stopRecording" type="danger">
-                <span class="recorder-icon stop-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path
-                            d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48z" /></svg>
-                    <!--<img src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjY0cHgiIGhlaWdodD0iNjRweCIgdmlld0JveD0iMCAwIDMwNiAzMDYiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDMwNiAzMDY7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8ZyBpZD0ic3RvcCI+CgkJPHJlY3Qgd2lkdGg9IjMwNiIgaGVpZ2h0PSIzMDYiIGZpbGw9IiNmNTZjNmMiLz4KCTwvZz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K" />-->
-                </span>
 
-                Закончить запись ({{ readableDuration(timeLeft) }})
+            <el-button class="record-button" v-if="isRecording && readyToRecord" @click="stopRecording" type="danger">
+                <i class="icon">
+                    <svg width="22" height="22" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+                        <g fill="none" fill-rule="evenodd">
+                            <circle fill="#FFF" cx="11" cy="11" r="11"></circle>
+                            <rect fill="#F66" x="5" y="5" width="12" height="12" rx="1"></rect>
+                        </g>
+                    </svg>
+                </i>
+                <span>Закончить запись ({{ readableDuration(timeLeft) }})</span>
             </el-button>
         </div>
     </div>
@@ -50,6 +64,12 @@
       },
       'questionId': {
         type: Number
+      },
+      'startRecorder': {
+        type: Boolean
+      },
+      'readyToRecord': {
+        type: Boolean
       }
     },
     data() {
@@ -71,6 +91,12 @@
     },
 
     created() {
+      console.log('video contaioner created');
+    },
+    beforeDestroy() {
+      console.log('video contaioner beforeDestroy');
+      this.recorder.clean();
+      this.publisher = null;
     },
 
     methods: {
@@ -97,6 +123,7 @@
         this.recorder.record();
         this.isRecording = true;
         this.timeLeft = this.durationMax;
+        this.$emit('recording-started');
 
         this.recordInterval = setInterval(() => {
           this.timeLeft -= 1000;
@@ -115,21 +142,33 @@
         this.recorder.stop().then(() => {
           this.isRecording = false;
           this.$refs['video-recorder'].innerHTML = '';
-          this.showPreview();
-          this.saveRecord();
           this.answered = true;
+          // this.showPreview();
+          this.saveRecord()
+            .then(() => {
+              console.log('saved');
+              this.$emit('recording-finished');
+            });
         });
       },
 
       saveRecord() {
         const videoFile = new FormData();
         videoFile.append('file', this.recorder.blob, this.recorder.id + '.webm');
-        Recordings.upload(videoFile, this.respondId, this.questionId);
+        return Recordings.upload(videoFile, this.respondId, this.questionId);
       },
 
       showPreview() {
         const recordingPreview = this.recorder.preview(this.$refs['video-preview']);
+        recordingPreview.autoplay = false;
         recordingPreview.controls = true;
+      }
+    },
+    watch: {
+      startRecorder(oldValue) {
+        if (oldValue && !this.isRecording) {
+          this.startRecording();
+        }
       }
     }
   };
@@ -139,28 +178,29 @@
     .video-container-wrap {
         width: 50%;
         text-align: center;
+
+        .video-container {
+            margin-bottom: .5rem;
+        }
     }
 
-    .recorder-icon {
-        font-size: 0;
-        display: inline-block;
-        vertical-align: baseline;
+    .record-button {
+        stroke: #fff;
+        fill: #fff;
 
-        svg {
-            height: 17px;
-        }
-
-        &.stop-icon {
-            background-color: #fff;
-            fill: #f56c6c;
-            border-radius: 50%;
-            padding: 4px;
-
+        .icon {
+            margin-right: 4px;
+            vertical-align: middle;
 
             svg {
-                width: 12px;
-                height: 12px;
+                position: relative;
+                top: 2px;
             }
+        }
+
+        span {
+            font-size: 18px;
+            line-height: 17px;
         }
     }
 

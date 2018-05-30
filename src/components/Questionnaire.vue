@@ -6,33 +6,52 @@
 
 
         <!--{{currentQuestion}}-->
-
         <div class="question-row">
 
             <div class="question-col">
-                <div class="read-duration-counter" v-if="isDurationCounterVisible">
-                    {{ readableDuration(durationToReadLeft) }}
-                </div>
 
-                <div v-if="!isQuestionHidden" class="question-content">
-                    {{ currentQuestion.question }}
-                </div>
+
+                <!--<div class="read-duration-counter" v-if="isDurationCounterVisible && !timeToReadInterval">-->
+                <!--{{ readableDuration(this.currentQuestion.durationToRead) }}-->
+                <!--</div>-->
 
                 <div v-if="isQuestionHidden">
-                    Время на подготовку к вопросу ограничено. Ответ нельзя будет перезаписать. Вы готовы?
+                    <div class="message-block">
+                        <i class="el-message__icon el-icon-info"></i>
+                        <p>Время на подготовку к вопросу ограничено.<br>Запись начнется автоматически через
+                            {{readableDuration(this.currentQuestion.durationToRead) }}. Ответ нельзя будет
+                            перезаписать. Вы готовы?</p>
+                    </div>
 
-                    <br>
-                    <el-button @click="showQuestion()">Показать вопрос</el-button>
+                    <el-button class="show-question-button" type="text" @click="showQuestion()">
+                        Да, показать вопрос.
+                    </el-button>
                 </div>
 
-                <el-button v-if="isQuestionAnswered" @click="setQuestionIndex(currentQuestionIndex+1)">Следующий вопрос</el-button>
+
+                <div v-if="!isQuestionHidden" class="message-block message-block-warning el-message--warning">
+                    <i class="el-message__icon el-icon-question"></i>
+                    <p>{{ currentQuestion.question }}</p>
+                </div>
+
+
+                <div class="autorecord-info" v-if="isDurationCounterVisible && timeToReadInterval">
+                    Запись начнется автоматически через {{ readableDuration(durationToReadLeft) }}
+                </div>
+
+                <!--<el-button @click="setQuestionIndex(currentQuestionIndex+1)">Следующий вопрос</el-button>-->
+                <!--v-if="isQuestionAnswered"-->
             </div>
 
 
             <VideoContainer :durationMax="currentQuestion.durationMax"
                             :questionId="currentQuestion.id"
                             :respondId="respondId"
-                            :readyToRecord="readyToRecord"
+                            :startRecorder="startRecorder"
+                            :readyToRecord="!isQuestionHidden"
+                            :key="currentQuestion.id"
+                            v-on:recording-finished="setQuestionIndex(currentQuestionIndex+1)"
+                            v-on:recording-started="isDurationCounterVisible = false"
             ></VideoContainer>
 
         </div>
@@ -70,8 +89,9 @@
         currentQuestion: {},
         isQuestionHidden: true,
         isDurationCounterVisible: true,
-        readyToRecord: false,
+        startRecorder: false,
         timeToReadInterval: null,
+        timeToReadTimeout: null,
         durationToReadLeft: 0
       };
     },
@@ -87,48 +107,61 @@
       // }
     },
     methods: {
+      initQuestionState() {
+        this.durationToReadLeft = 0;
+        this.isQuestionHidden = true;
+        this.isDurationCounterVisible = true;
+        this.startRecorder = false;
+        this.timeToReadInterval = clearInterval(this.timeToReadInterval);
+        this.timeToReadTimeout = clearTimeout(this.timeToReadTimeout);
+
+        if (this.isQuestionAnswered || !this.currentQuestion.durationToRead) {
+          this.isQuestionHidden = false;
+        }
+      },
+
       readableDuration(ms) {
         return parseMillisecondsIntoReadableTime(ms);
       },
 
       setQuestionIndex(index) {
         this.currentQuestion = this.questions[index];
+        this.initQuestionState();
+
       },
 
       showQuestion() {
         this.isQuestionHidden = false;
-
         this.durationToReadLeft = this.currentQuestion.durationToRead || 0;
 
         this.timeToReadInterval = setInterval(() => {
           this.durationToReadLeft -= 1000;
         }, 1000);
 
-        setTimeout(() => {
+        this.timeToReadTimeout = setTimeout(() => {
           this.timeToReadInterval = clearInterval(this.timeToReadInterval);
           this.hideDurationCounter();
+          this.startRecorder = true;
         }, this.currentQuestion.durationToRead);
       },
 
       hideDurationCounter() {
-        this.isDurationCounterVisible = false
+        this.isDurationCounterVisible = false;
       }
     },
     mounted() {
       this.currentQuestion = this.questions[0];
 
-      if (this.isQuestionAnswered || !this.currentQuestion.durationToRead) {
-        this.isQuestionHidden = false;
-      }
+      this.initQuestionState();
     }
-
   };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .questions-counter {
-        font-size: 1.2rem;
+        font-size: 18px;
         font-weight: bold;
+        margin-bottom: 2rem;
     }
 
     .question-row {
@@ -136,11 +169,50 @@
         text-align: left;
     }
 
-    .read-duration-counter {
-        display: inline-block;
-        background-color: #f2f2f2;
-        padding: 3px;
-        font-weight: bold;
-        font-size: 1.2rem;
+    .autorecord-info {
+        margin-top: 1rem;
+    }
+
+    .message-block {
+        border-width: 1px;
+        border-style: solid;
+        border-color: #ebeef5;
+        background-color: #edf2fc;
+        padding: 15px 15px 15px 20px;
+        display: flex;
+        align-items: center;
+
+        &.message-block-warning {
+            background-color: #fdf6ec;
+            border-color: #faecd8;
+        }
+
+        .el-message__icon {
+            margin-right: 10px;
+
+            &.el-icon-info {
+                color: #909399;
+            }
+
+            &.el-icon-question {
+                color: #e6a23c;
+            }
+        }
+
+        p {
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.42;
+        }
+    }
+
+    .question-col {
+        width: 60%;
+        margin-right: 3rem;
+    }
+
+    .show-question-button {
+        float: right;
+        font-size: 18px;
     }
 </style>

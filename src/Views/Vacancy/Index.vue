@@ -20,8 +20,17 @@
                         <slot v-if="activeStep === 0">
                             <h1 class="text-center">Видеоинтервью на позицию {{ vacancy.position }}</h1>
 
-                            <div class="vacancy-description">
-                                <p v-html="vacancy.description"></p>
+                            <div class="vacancy-overview">
+                                <div class="vacancy-video-container">
+                                    <div class="embed-responsive">
+                                        <iframe src="https://www.youtube.com/embed/VGIJrXpbt90" class="embed-responsive-item"
+                                                frameborder="0"
+                                                allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+
+
+                                <p class="vacancy-description" v-html="vacancy.description"></p>
                             </div>
 
                             <el-button type="primary" @click="nextStep">Продолжить</el-button>
@@ -65,7 +74,7 @@
 
 
                         <div class="respond-wrap" v-if="activeStep === 2">
-                            <Questionnaire :questions="vacancy.questions"
+                            <Questionnaire :questions="questions"
                                            :respondQuestions="respond.respondQuestions"
                                            :respondId="respond.respondId"></Questionnaire>
                         </div>
@@ -110,7 +119,7 @@
       Vacancies.get()
         .then(res => {
           this.vacancy = res.data[0];
-          this.questions = this.vacancy.questions;
+          this.questions = this.vacancy.questions.sort((a, b) => a - b);
         });
       // Vacancies.getQuestions(this.vacancyId);
 
@@ -177,9 +186,21 @@
         margin-bottom: 4rem
     }
 
-    .vacancy-description {
+    .vacancy-overview {
+        display: flex;
         margin-bottom: 4rem;
         text-align: left;
+
+        .vacancy-video-container {
+            width: 47%;
+            margin-right: 2rem;
+            align-self: center;
+        }
+
+        .vacancy-description {
+            width: 53%;
+        }
+
     }
 
     .form-description {
