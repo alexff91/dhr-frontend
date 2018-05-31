@@ -3,3 +3,4 @@ module.exports = {
     port: 9898
   },
   assetsPublicPath: '/demo/'
+} 
