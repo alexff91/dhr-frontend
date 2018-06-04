@@ -215,6 +215,7 @@
     }
 
     .show-question-button {
+        float: right;
         margin-left: 1rem;
         font-size: 18px;
     }
@@ -230,6 +231,7 @@
         }
 
         .show-question-button {
+            float: none;
             margin-left: 0;
         }
 
