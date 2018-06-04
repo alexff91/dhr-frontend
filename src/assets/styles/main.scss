@@ -17,7 +17,8 @@ body {
   font-size: 1rem;
   margin: 0;
   padding: 0;
-  background-color: white;
+  //background-color: white;
+  background-color: #eee;
   color: #262626;
 }
 
@@ -62,5 +63,11 @@ p {
     width: 100%;
     height: 100%;
     border: 0;
+  }
+}
+
+@keyframes fade-in {
+  50% {
+    opacity: .6;
   }
 }

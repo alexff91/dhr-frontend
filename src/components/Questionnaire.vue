@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="questionnaire">
         <div class="questions-counter">
             Вопрос {{ currentQuestionIndex + 1 }} из {{ questions.length }}
         </div>
@@ -23,8 +23,8 @@
                             перезаписать. Вы готовы?</p>
                     </div>
 
-                    <el-button class="show-question-button" type="text" @click="showQuestion()">
-                        Да, показать вопрос.
+                    <el-button class="show-question-button" @click="showQuestion()">
+                        Да, показать вопрос
                     </el-button>
                 </div>
 
@@ -49,7 +49,6 @@
                             :respondId="respondId"
                             :startRecorder="startRecorder"
                             :readyToRecord="!isQuestionHidden"
-                            :key="currentQuestion.id"
                             v-on:recording-finished="setQuestionIndex(currentQuestionIndex+1)"
                             v-on:recording-started="isDurationCounterVisible = false"
             ></VideoContainer>
@@ -125,9 +124,13 @@
       },
 
       setQuestionIndex(index) {
+        // if (!this.questions[index]) {
+        if (index === 2) {
+          this.$emit('response-finished');
+          return;
+        }
         this.currentQuestion = this.questions[index];
         this.initQuestionState();
-
       },
 
       showQuestion() {
@@ -169,10 +172,6 @@
         text-align: left;
     }
 
-    .autorecord-info {
-        margin-top: 1rem;
-    }
-
     .message-block {
         border-width: 1px;
         border-style: solid;
@@ -181,6 +180,7 @@
         padding: 15px 15px 15px 20px;
         display: flex;
         align-items: center;
+        margin-bottom: 1rem;
 
         &.message-block-warning {
             background-color: #fdf6ec;
@@ -211,8 +211,37 @@
         margin-right: 3rem;
     }
 
+    .autorecord-info {
+        padding-left: 1rem;
+    }
+
     .show-question-button {
-        float: right;
+        margin-left: 1rem;
         font-size: 18px;
+    }
+
+    @media screen and (max-width: 768px) {
+        .questionnaire {
+            padding-bottom: 200px;
+        }
+
+        .autorecord-info {
+            padding-left: 0;
+            margin-bottom: .5rem;
+        }
+
+        .show-question-button {
+            margin-left: 0;
+        }
+
+        .question-row {
+            flex-direction: column;
+
+            .question-col {
+                width: 100%;
+                margin: 0;
+            }
+        }
+
     }
 </style>

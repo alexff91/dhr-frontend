@@ -1,15 +1,12 @@
 <template>
     <div class="video-container-wrap">
-        <div ref="video-recorder" class="video-container"></div>
+        <div ref="video-recorder" class="video-container">
+            <div class="is-recording-icon" v-if="isRecording"></div>
+        </div>
         <div ref="video-preview" class="video-container"></div>
 
-        <!--<div class="max-duration-counter">-->
-        <!--<slot v-if="isRecording"></slot>-->
-        <!--<slot v-if="!isRecording"></slot>-->
-        <!--</div>-->
-
         <div class="video-controls">
-            <el-button class="record-button" v-if="!isRecording && !answered && readyToRecord" @click="startRecording">
+            <el-button class="record-button" v-if="!isRecording && readyToRecord" @click="startRecording">
                 <i class="icon">
                     <svg width="22" height="22" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg"
                          xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -79,7 +76,6 @@
         recordTimeout: null,
         recordInterval: null,
         isRecording: false,
-        answered: false,
         timeLeft: 0
       };
     },
@@ -141,12 +137,12 @@
 
         this.recorder.stop().then(() => {
           this.isRecording = false;
-          this.$refs['video-recorder'].innerHTML = '';
-          this.answered = true;
+          // this.$refs['video-recorder'].innerHTML = '';
           // this.showPreview();
           this.saveRecord()
             .then(() => {
               console.log('saved');
+              this.recorder.clean();
               this.$emit('recording-finished');
             });
         });
@@ -169,6 +165,9 @@
         if (oldValue && !this.isRecording) {
           this.startRecording();
         }
+      },
+      questionId(newVal, oldValue) {
+        this.initRecorder();
       }
     }
   };
@@ -180,8 +179,22 @@
         text-align: center;
 
         .video-container {
+            position: relative;
             margin-bottom: .5rem;
         }
+    }
+
+    .is-recording-icon {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: #fc3636;
+        right: 1rem;
+        top: 1rem;
+
+        animation: 1.5s infinite fade-in;
+
     }
 
     .record-button {
@@ -212,5 +225,14 @@
         position: absolute;
         font-size: 1.5rem;
 
+    }
+
+    @media screen and (max-width: 768px) {
+        .video-container-wrap .video-container {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            width: 40%;
+        }
     }
 </style>

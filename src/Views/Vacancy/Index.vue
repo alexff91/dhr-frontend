@@ -1,8 +1,8 @@
 <template>
     <el-row type="flex" justify="center">
-        <el-col :xs="24" :sm="22" :md="18" :lg="16" :xl="14" class="main-col">
+        <el-col :xs="23" :sm="23" :md="23" :lg="20" :xl="20" class="main-col">
             <el-container>
-                <el-header class="vacancy-header" height="80px">
+                <el-header class="vacancy-header" height="120px">
                     <div class="company-logo">
                         <img v-if="company.companyLogoPath" :src="company.companyLogoPath">
                         <span v-if="!company.companyLogoPath">{{ company.companyName }}</span>
@@ -74,9 +74,15 @@
 
 
                         <div class="respond-wrap" v-if="activeStep === 2">
-                            <Questionnaire :questions="questions"
+                            <Questionnaire v-on:response-finished="nextStep"
+                                           :questions="questions"
                                            :respondQuestions="respond.respondQuestions"
                                            :respondId="respond.respondId"></Questionnaire>
+                        </div>
+
+                        <div v-if="activeStep === 3" class="finish-wrap">
+                            <div class="finished-title">Спасибо за интервью!</div>
+                            Мы свяжемся с вами в скором времени.
                         </div>
                     </div>
                 </el-main>
@@ -131,9 +137,7 @@
     },
     methods: {
       nextStep() {
-        if (this.activeStep === 0) {
-          this.activeStep++;
-        }
+        this.activeStep++;
       },
       sendForm() {
         this.$refs['form'].validate((valid) => {
@@ -159,13 +163,11 @@
 </script>
 
 <style scoped lang="scss">
-    .vacancy-header {
-        line-height: 80px;
+    header.vacancy-header {
+        padding: 30px 0 0 40px;
     }
 
     .company-logo {
-        line-height: 80px;
-
         span {
             font-weight: bold;
             font-size: 2rem;
@@ -179,16 +181,22 @@
     }
 
     .main-col {
-        /*background-color: #f9f9f9;*/
+        background: #fff;
+        box-shadow: 0 4px 70px -18px #707070;
+        margin: 1rem 0;
+    }
+
+    .el-main {
+        padding: 0 0 4rem 0;
     }
 
     .steps-wrap {
-        margin-bottom: 4rem
+        margin-bottom: 3rem;
     }
 
     .vacancy-overview {
         display: flex;
-        margin-bottom: 4rem;
+        margin-bottom: 3rem;
         text-align: left;
 
         .vacancy-video-container {
@@ -199,11 +207,52 @@
 
         .vacancy-description {
             width: 53%;
+            padding-right: 2rem;
         }
 
     }
 
     .form-description {
         margin-bottom: 2rem;
+    }
+
+    .finish-wrap {
+
+        .finished-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .el-main {
+            padding: 1rem;
+        }
+
+        header.vacancy-header {
+            padding: 1.5rem 0 0 2rem;
+        }
+
+        .steps-wrap {
+            .el-step__title {
+                line-height: 1.4;
+            }
+        }
+
+        .vacancy-overview {
+            flex-direction: column;
+
+            .vacancy-video-container {
+                width: 100%;
+                margin: 0 0 1.5rem 0;
+                align-self: center;
+            }
+
+            .vacancy-description {
+                width: 100%;
+                padding-right: 0;
+            }
+        }
     }
 </style>
