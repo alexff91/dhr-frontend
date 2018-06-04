@@ -87,12 +87,17 @@
     },
 
     created() {
-      console.log('video contaioner created');
+      console.log('video container created');
     },
     beforeDestroy() {
-      console.log('video contaioner beforeDestroy');
+      console.log('video container beforeDestroy');
       this.recorder.clean();
-      this.publisher = null;
+
+      const streamTracks = this.publisher.stream.getMediaStream().getTracks();
+      streamTracks.forEach(track => {
+        track.stop();
+      });
+
     },
 
     methods: {
@@ -107,6 +112,8 @@
           insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
           mirror: false       	// Whether to mirror your local video or not
         });
+
+        console.log(this.publisher);
       },
       initRecorder() {
         this.recorder = VIDU.initLocalRecorder(this.publisher.stream);

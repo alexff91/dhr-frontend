@@ -85,6 +85,7 @@
                             <div class="finished-title">Спасибо за интервью!</div>
                             Мы свяжемся с вами в скором времени.
                             <br>
+                            <br>
                         </div>
                     </div>
                 </el-main>
