@@ -1,12 +1,23 @@
 <template>
     <div class="video-container-wrap">
         <div ref="video-recorder" class="video-container">
-            <div class="is-recording-icon" v-if="isRecording"></div>
+            <div class="status-recording-icon" v-if="isRecording"></div>
+            <div class="status-saving-icon" v-if="savingInProgress">
+                <svg width="74px" height="74px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid"
+                     class="lds-infinity">
+                    <path fill="none"
+                          d="M24.3,30C11.4,30,5,43.3,5,50s6.4,20,19.3,20c19.3,0,32.1-40,51.4-40 C88.6,30,95,43.3,95,50s-6.4,20-19.3,20C56.4,70,43.6,30,24.3,30z"
+                          stroke="#ff7c81" stroke-width="7" stroke-dasharray="159.08513549804687 97.50379272460938">
+                        <animate attributeName="stroke-dashoffset" calcMode="linear" values="0;256.58892822265625" keyTimes="0;1" dur="1"
+                                 begin="0s" repeatCount="indefinite"></animate>
+                    </path>
+                </svg>
+            </div>
         </div>
         <div ref="video-preview" class="video-container"></div>
 
         <div class="video-controls">
-            <el-button class="record-button" v-if="!isRecording && readyToRecord" @click="startRecording">
+            <el-button class="record-button" v-if="!isRecording && readyToRecord && !savingInProgress" @click="startRecording">
                 <i class="icon">
                     <svg width="22" height="22" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg"
                          xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -76,6 +87,7 @@
         recordTimeout: null,
         recordInterval: null,
         isRecording: false,
+        savingInProgress: false,
         timeLeft: 0
       };
     },
@@ -112,8 +124,6 @@
           insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
           mirror: false       	// Whether to mirror your local video or not
         });
-
-        console.log(this.publisher);
       },
       initRecorder() {
         this.recorder = VIDU.initLocalRecorder(this.publisher.stream);
@@ -146,9 +156,11 @@
           this.isRecording = false;
           // this.$refs['video-recorder'].innerHTML = '';
           // this.showPreview();
+          this.savingInProgress = true;
           this.saveRecord()
             .then(() => {
               console.log('saved');
+              this.savingInProgress = false;
               this.recorder.clean();
               this.$emit('recording-finished');
             });
@@ -191,19 +203,6 @@
         }
     }
 
-    .is-recording-icon {
-        position: absolute;
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        background-color: #fc3636;
-        right: 1rem;
-        top: 1rem;
-
-        animation: 1.5s infinite fade-in;
-
-    }
-
     .record-button {
         stroke: #fff;
         fill: #fff;
@@ -231,7 +230,34 @@
     .max-duration-counter {
         position: absolute;
         font-size: 1.5rem;
+    }
 
+    .status-recording-icon {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        right: 1rem;
+        top: 1rem;
+        border-radius: 50%;
+        background-color: #fc3636;
+        animation: 1.5s infinite fade-in;
+    }
+
+    .status-saving-icon {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(148, 148, 148, 0.52);
+
+        svg {
+            width: 40%;
+            height: 40%;
+            top: 50%;
+            position: relative;
+            transform: translateY(-50%);
+        }
     }
 
     @media screen and (max-width: 768px) {
