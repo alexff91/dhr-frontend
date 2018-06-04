@@ -201,6 +201,10 @@
             position: relative;
             margin-bottom: .5rem;
         }
+
+        .video-controls {
+            min-height: 50px;
+        }
     }
 
     .record-button {
