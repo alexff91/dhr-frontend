@@ -222,7 +222,7 @@
 
     @media screen and (max-width: 768px) {
         .questionnaire {
-            padding-bottom: 200px;
+            padding-bottom: 300px;
         }
 
         .autorecord-info {

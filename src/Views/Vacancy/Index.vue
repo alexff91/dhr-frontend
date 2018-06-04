@@ -162,7 +162,7 @@
   };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
     header.vacancy-header {
         padding: 30px 0 0 40px;
     }
@@ -186,7 +186,7 @@
         margin: 1rem 0;
     }
 
-    .el-main {
+    main.el-main {
         padding: 0 0 4rem 0;
     }
 
@@ -226,7 +226,7 @@
     }
 
     @media screen and (max-width: 768px) {
-        .el-main {
+        main.el-main {
             padding: 1rem;
         }
 
