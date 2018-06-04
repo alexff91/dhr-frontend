@@ -62,7 +62,7 @@
                                                       { required: true, message: 'Введите email', trigger: 'blur' },
                                                       { type: 'email', message: 'Email невалиден', trigger: ['blur', 'change'] }
                                                     ]">
-                                            <el-input v-model="form.email"></el-input>
+                                            <el-input type="email" v-model="form.email"></el-input>
                                         </el-form-item>
 
                                         <br>
