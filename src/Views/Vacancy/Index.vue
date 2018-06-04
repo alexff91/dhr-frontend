@@ -56,6 +56,7 @@
                                             <el-input v-model="form.lastName"></el-input>
                                         </el-form-item>
                                         <el-form-item prop="email"
+                                                      type="email"
                                                       label="Email"
                                                       :rules="[
                                                       { required: true, message: 'Введите email', trigger: 'blur' },
@@ -83,6 +84,7 @@
                         <div v-if="activeStep === 3" class="finish-wrap">
                             <div class="finished-title">Спасибо за интервью!</div>
                             Мы свяжемся с вами в скором времени.
+                            <br>
                         </div>
                     </div>
                 </el-main>

@@ -124,8 +124,7 @@
       },
 
       setQuestionIndex(index) {
-        // if (!this.questions[index]) {
-        if (index === 2) {
+        if (!this.questions[index]) {
           this.$emit('response-finished');
           return;
         }
