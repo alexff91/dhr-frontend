@@ -4,7 +4,7 @@
             <el-input v-model="demoVacancy" placeholder="Введите номер вакансии"
                       style="display: block; font-size: 2rem; margin-top: 10rem; text-align:center" />
             <el-button type="success" style="margin:auto; font-size: 2rem; display: block; text-align:center">
-                <router-link to="/vacancy/4eda6662" v-if="!demoVacancy">
+                <router-link to="/vacancy/d91778dd" v-if="!demoVacancy">
                     Test Vacancy
                 </router-link>
                 <router-link :to="{ path: '/vacancy/'+demoVacancy }" v-if="demoVacancy">
