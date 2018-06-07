@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BACKEND_URL = 'https://vi-hr.com:8080';
+const BACKEND_URL = 'https://vi-hr.com:8082';
 
 const http = axios.create({
   baseURL: `${BACKEND_URL}/api/v1`
@@ -21,7 +21,7 @@ export const Vacancies = (() => {
     return http.get(`/vacancies/${vacancyId}`);
   };
 
-  const getQuestions = (vacancyId) => {
+  const getQuestions = (vacancyId = '') => {
     return http.get(`/vacancies/${vacancyId}/questions`);
   };
 

@@ -23,7 +23,8 @@
                             <div class="vacancy-overview">
                                 <div class="vacancy-video-container">
                                     <div class="embed-responsive">
-                                        <iframe src="https://www.youtube.com/embed/VGIJrXpbt90" class="embed-responsive-item"
+                                        <iframe src="https://www.youtube.com/embed/VGIJrXpbt90"
+                                                class="embed-responsive-item"
                                                 frameborder="0"
                                                 allow="autoplay; encrypted-media" allowfullscreen></iframe>
                                     </div>
@@ -39,7 +40,8 @@
                         <slot v-if="activeStep === 1">
 
                             <div class="text-center form-description">
-                                Введите контактные данные, чтобы мы могли<br> с вами связаться и сообщить о результатах интервью
+                                Введите контактные данные, чтобы мы могли<br> с вами связаться и сообщить о результатах
+                                интервью
                             </div>
 
                             <el-row type="flex" justify="center">
@@ -78,7 +80,7 @@
                             <Questionnaire v-on:response-finished="nextStep"
                                            :questions="questions"
                                            :respondQuestions="respond.respondQuestions"
-                                           :respondId="respond.respondId"></Questionnaire>
+                                           :respondId="respond.id"></Questionnaire>
                         </div>
 
                         <div v-if="activeStep === 3" class="finish-wrap">
@@ -98,7 +100,7 @@
 
 <script>
   import VideoContainer from '../../components/VideoContainer';
-  import { Vacancies, Companies, Responds } from '../../api';
+  import { Companies, Responds, Vacancies } from '../../api';
   import Questionnaire from '../../components/Questionnaire';
 
   export default {
@@ -125,13 +127,15 @@
     },
     created() {
       // TODO: нужно дергать по vacancy id
-      Vacancies.get()
+      Vacancies.get(this.vacancyId)
         .then(res => {
-          this.vacancy = res.data[0];
-          this.questions = this.vacancy.questions.sort((a, b) => a - b);
+          this.vacancy = res.data;
         });
       // Vacancies.getQuestions(this.vacancyId);
-
+      Vacancies.getQuestions(this.vacancyId).then(res => {
+          this.questions = res.data.sort((a, b) => a - b);
+        }
+      );
       // TODO: нужно дергать по id компании
       Companies.get()
         .then(res => {
