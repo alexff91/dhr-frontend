@@ -128,6 +128,7 @@
       Vacancies.get(this.vacancyId)
         .then(res => {
           this.vacancy = res.data;
+          console.log('vacancy', this.vacancy);
         });
       // Vacancies.getQuestions(this.vacancyId);
       Vacancies.getQuestions(this.vacancyId).then(res => {
