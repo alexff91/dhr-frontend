@@ -3,4 +3,4 @@ module.exports = {
     port: 9898
   },
   baseUrl: '/demo/'
-} 
+};
