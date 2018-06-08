@@ -7,6 +7,10 @@
                     <router-link class="vacancy-link" :to="`/vacancy/${vacancy.id}`">{{vacancy.position}}</router-link>
                 </li>
             </ul>
+
+            <div v-if="!vacancyList.length">
+                Доступных вакансий нет.
+            </div>
         </div>
         <router-view></router-view>
     </div>
