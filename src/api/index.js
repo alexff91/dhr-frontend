@@ -11,8 +11,13 @@ export const Companies = (() => {
     return http.get(`/companies/${companyId}`);
   };
 
+  const getVacancies = (companyId) => {
+    return http.get(`/companies/${companyId}/vacancies`);
+  };
+
   return {
-    get
+    get,
+    getVacancies
   };
 })();
 
