@@ -10,9 +10,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "element-ui": "^2.3.9",
-    "node-sass": "^4.9.0",
     "openvidu-browser": "^2.0.0",
-    "sass-loader": "^7.0.1",
     "vue": "^2.5.16",
     "vue-analytics": "^5.12.2",
     "vue-router": "^3.0.1"
@@ -21,7 +19,9 @@
     "@vue/cli-plugin-babel": "^3.0.0-beta.10",
     "@vue/cli-plugin-eslint": "^3.0.0-beta.10",
     "@vue/cli-service": "^3.0.0-beta.10",
-    "vue-template-compiler": "^2.5.13"
+    "vue-template-compiler": "^2.5.13",
+    "sass-loader": "^7.0.1",
+    "node-sass": "^4.9.0"
   },
   "babel": {
     "presets": [
