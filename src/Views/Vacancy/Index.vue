@@ -4,8 +4,8 @@
             <el-container>
                 <el-header class="vacancy-header" height="120px">
                     <div class="company-logo">
-                        <img v-if="company.companyLogoPath" :src="company.companyLogoPath">
-                        <span v-if="!company.companyLogoPath">{{ company.companyName }}</span>
+                        <img v-if="company.logoPath" :src="company.logoPath">
+                        <span v-if="!company.logoPath">{{ company.name }}</span>
                     </div>
                 </el-header>
 
@@ -127,7 +127,7 @@
       Vacancies.get(this.vacancyId)
         .then(res => {
           this.vacancy = res.data;
-          document.title = `${this.vacancy.position} в компанию ${this.vacancy.company.companyName}`;
+          document.title = `${this.vacancy.position} в компанию ${this.vacancy.company.name}`;
           this.company = this.vacancy.company;
         });
 
