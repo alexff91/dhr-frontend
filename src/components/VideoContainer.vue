@@ -119,12 +119,12 @@
           videoSource: undefined, // The source of video. If undefined default webcam
           publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
           publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
-          resolution: '560x460',  // The resolution of your video
-          frameRate: 15,			// The frame rate of your video
+          resolution: '480x360',  // The resolution of your video
+          frameRate: 14,			// The frame rate of your video
           insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
           mirror: false       	// Whether to mirror your local video or not
         }, () => {
-          this.publisher.stream.video.setAttribute('playsinline', '');
+          this.$refs['video-recorder'].querySelector('video').setAttribute('playsinline', '');
         });
       },
       initRecorder() {
@@ -196,7 +196,7 @@
 
 <style lang="scss">
     .video-container-wrap {
-        width: 50%;
+        width: 40%;
         text-align: center;
 
         .video-container {
@@ -230,7 +230,7 @@
     }
 
     video {
-        max-width: 100%;
+        width: 100%;
     }
 
     .max-duration-counter {
