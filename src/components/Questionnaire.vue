@@ -1,58 +1,57 @@
 <template>
-    <div class="questionnaire">
-        <div class="questions-counter">
-            Вопрос {{ currentQuestionIndex + 1 }} из {{ questions.length }}
+    <div>
+        <div v-if="!questions.length">
+            По этой вакансии нет вопросов.
         </div>
 
-
-        <!--{{currentQuestion}}-->
-        <div class="question-row">
-
-            <div class="question-col">
-
-
-                <!--<div class="read-duration-counter" v-if="isDurationCounterVisible && !timeToReadInterval">-->
-                <!--{{ readableDuration(this.currentQuestion.durationToRead) }}-->
-                <!--</div>-->
-
-                <div v-if="isQuestionHidden">
-                    <div class="message-block">
-                        <i class="el-message__icon el-icon-info"></i>
-                        <p>Время на подготовку к вопросу ограничено.<br>Запись начнется автоматически через
-                            {{readableDuration(this.currentQuestion.durationToRead) }}. Ответ нельзя будет
-                            перезаписать. Вы готовы?</p>
-                    </div>
-
-                    <el-button class="show-question-button" @click="showQuestion()">
-                        Да, показать вопрос
-                    </el-button>
-                </div>
-
-
-                <div v-if="!isQuestionHidden" class="message-block message-block-warning el-message--warning">
-                    <i class="el-message__icon el-icon-question"></i>
-                    <p>{{ currentQuestion.question }}</p>
-                </div>
-
-
-                <div class="autorecord-info" v-if="isDurationCounterVisible && timeToReadInterval">
-                    Запись начнется автоматически через {{ readableDuration(durationToReadLeft) }}
-                </div>
-
-                <!--<el-button @click="setQuestionIndex(currentQuestionIndex+1)">Следующий вопрос</el-button>-->
-                <!--v-if="isQuestionAnswered"-->
+        <div class="questionnaire" v-if="questions.length">
+            <div class="questions-counter">
+                Вопрос {{ currentQuestionIndex + 1 }} из {{ questions.length }}
             </div>
 
+            <!--{{currentQuestion}}-->
+            <div class="question-row">
 
-            <VideoContainer :durationMax="currentQuestion.durationMax"
-                            :questionId="currentQuestion.id"
-                            :respondId="respondId"
-                            :startRecorder="startRecorder"
-                            :readyToRecord="!isQuestionHidden"
-                            v-on:recording-finished="setQuestionIndex(currentQuestionIndex+1)"
-                            v-on:recording-started="isDurationCounterVisible = false"
-            ></VideoContainer>
+                <div class="question-col">
 
+                    <div v-if="isQuestionHidden">
+                        <div class="message-block">
+                            <i class="el-message__icon el-icon-info"></i>
+                            <p>Время на подготовку к вопросу ограничено.<br>Запись начнется автоматически через
+                                {{readableDuration(this.currentQuestion.durationToRead) }}. Ответ нельзя будет
+                                перезаписать. Вы готовы?</p>
+                        </div>
+
+                        <el-button class="show-question-button" @click="showQuestion()">
+                            Да, показать вопрос
+                        </el-button>
+                    </div>
+
+                    <div v-if="!isQuestionHidden" class="message-block message-block-warning el-message--warning">
+                        <i class="el-message__icon el-icon-question"></i>
+                        <p>{{ currentQuestion.question }}</p>
+                    </div>
+
+
+                    <div class="autorecord-info" v-if="isDurationCounterVisible && timeToReadInterval">
+                        Запись начнется автоматически через {{ readableDuration(durationToReadLeft) }}
+                    </div>
+
+                    <!--<el-button @click="setQuestionIndex(currentQuestionIndex+1)">Следующий вопрос</el-button>-->
+                    <!--v-if="isQuestionAnswered"-->
+                </div>
+
+
+                <VideoContainer :durationMax="currentQuestion.durationMax"
+                                :questionId="currentQuestion.id"
+                                :respondId="respondId"
+                                :startRecorder="startRecorder"
+                                :readyToRecord="!isQuestionHidden"
+                                v-on:recording-finished="setQuestionIndex(currentQuestionIndex+1)"
+                                v-on:recording-started="isDurationCounterVisible = false"
+                ></VideoContainer>
+
+            </div>
         </div>
     </div>
 </template>
@@ -152,9 +151,10 @@
       }
     },
     mounted() {
-      this.currentQuestion = this.questions[0];
-
-      this.initQuestionState();
+      if (this.questions.length) {
+        this.currentQuestion = this.questions[0];
+        this.initQuestionState();
+      }
     }
   };
 </script>

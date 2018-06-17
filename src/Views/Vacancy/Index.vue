@@ -98,7 +98,7 @@
 
 <script>
   import VideoContainer from '../../components/VideoContainer';
-  import { Companies, Responds, Vacancies } from '../../api';
+  import { Responds, Vacancies } from '../../api';
   import Questionnaire from '../../components/Questionnaire';
 
   export default {
@@ -124,22 +124,18 @@
       }
     },
     created() {
-      // TODO: нужно дергать по vacancy id
       Vacancies.get(this.vacancyId)
         .then(res => {
           this.vacancy = res.data;
-          console.log('vacancy', this.vacancy);
+          document.title = `${this.vacancy.position} в компанию ${this.vacancy.company.companyName}`;
+          this.company = this.vacancy.company;
         });
-      // Vacancies.getQuestions(this.vacancyId);
+
       Vacancies.getQuestions(this.vacancyId).then(res => {
           this.questions = res.data.sort((a, b) => a - b);
         }
       );
-      // TODO: нужно дергать по id компании
-      Companies.get()
-        .then(res => {
-          this.company = res.data[0];
-        });
+
     },
     methods: {
       nextStep() {
