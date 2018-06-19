@@ -57,6 +57,11 @@
                                                       :rules="[{ required: true, message: 'Введите фамилию', trigger: 'blur' }]">
                                             <el-input v-model="form.lastName"></el-input>
                                         </el-form-item>
+                                        <el-form-item label="Телефон"
+                                                      prop="phone"
+                                                      :rules="[{ required: false, message: 'Введите телефон', trigger: 'blur' }]">
+                                            <el-input v-model="form.phone"></el-input>
+                                        </el-form-item>
                                         <el-form-item prop="email"
                                                       type="email"
                                                       label="Email"
@@ -110,7 +115,8 @@
         form: {
           name: '',
           lastName: '',
-          email: ''
+          email: '',
+          phone: ''
         },
         vacancy: {},
         company: {},
@@ -149,7 +155,8 @@
             Responds.createRespond(this.vacancyId, {
               email: formModel.email,
               name: formModel.name,
-              lastName: formModel.lastName
+              lastName: formModel.lastName,
+              phone: formModel.phone
             })
               .then(res => {
                 this.respond = res.data;
