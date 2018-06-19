@@ -4,8 +4,8 @@
             <el-container>
                 <el-header class="vacancy-header" height="120px">
                     <div class="company-logo">
-                        <img v-if="company.logoPath" :src="company.logoPath">
-                        <span v-if="!company.logoPath">{{ company.name }}</span>
+                        <img v-if="company.logo" :src="company.logo">
+                        <span v-if="!company.logo">{{ company.name }}</span>
                     </div>
                 </el-header>
 
