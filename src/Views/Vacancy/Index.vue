@@ -23,7 +23,7 @@
                             <div class="vacancy-overview">
                                 <div class="vacancy-video-container">
                                     <div class="embed-responsive">
-                                        <iframe src="https://www.youtube.com/embed/VGIJrXpbt90"
+                                        <iframe :src="vacancy.video"
                                                 class="embed-responsive-item"
                                                 frameborder="0"
                                                 allow="autoplay; encrypted-media" allowfullscreen></iframe>
