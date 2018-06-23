@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BACKEND_URL = 'https://app.vi-hr.com:8082';
+const BACKEND_URL = 'https://nexign.vi-hr.com:8080';
 
 const http = axios.create({
   baseURL: `${BACKEND_URL}/api/v1`,
