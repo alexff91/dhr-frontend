@@ -133,15 +133,10 @@
       Vacancies.get(this.vacancyId)
         .then(res => {
           this.vacancy = res.data;
+          this.questions = res.data.questions.sort((a, b) => a.orderNumber - b.orderNumber);
           document.title = `${this.vacancy.position} в компанию ${this.vacancy.company.name}`;
           this.company = this.vacancy.company;
         });
-
-      Vacancies.getQuestions(this.vacancyId).then(res => {
-          this.questions = res.data.sort((a, b) => a - b);
-        }
-      );
-
     },
     methods: {
       nextStep() {
