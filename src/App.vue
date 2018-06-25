@@ -1,37 +1,15 @@
 <template>
     <div id="app">
-        <div class="demo-container" v-if="$route.path === '/'">
-            <h1>Доступные вакансии</h1>
-            <ul v-if="vacancyList.length">
-                <li v-for="vacancy in vacancyList" :key="vacancy.id">
-                    <router-link class="vacancy-link" :to="`/vacancy/${vacancy.id}`">{{vacancy.position}}</router-link>
-                </li>
-            </ul>
-
-            <div v-if="!vacancyList.length">
-                Доступных вакансий нет.
-            </div>
-        </div>
         <router-view></router-view>
     </div>
 </template>
 
 <script>
-  import { Companies } from './api';
 
   export default {
     name: 'app',
     data() {
-      return {
-        demoCompanyId: 1,
-        vacancyList: []
-      };
-    },
-    mounted() {
-      Companies.getVacancies(this.demoCompanyId)
-        .then(res => {
-          this.vacancyList = res.data;
-        });
+      return {};
     }
   };
 </script>
