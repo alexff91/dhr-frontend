@@ -5,7 +5,7 @@
             Вакансия была удалена или перемещена в архив
         </div>
 
-        <template v-if="vacancy.deleted === false">
+        <template v-if="vacancy.deleted !== true">
             <el-col :xs="23" :sm="23" :md="23" :lg="20" :xl="20" class="main-col">
                 <el-container>
                     <el-header class="vacancy-header" height="120px">
