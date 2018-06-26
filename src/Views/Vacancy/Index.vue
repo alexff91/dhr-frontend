@@ -1,103 +1,110 @@
 <template>
     <el-row type="flex" justify="center">
-        <el-col :xs="23" :sm="23" :md="23" :lg="20" :xl="20" class="main-col">
-            <el-container>
-                <el-header class="vacancy-header" height="120px">
-                    <div class="company-logo">
-                        <img v-if="company.logo" :src="company.logo">
-                        <span v-if="!company.logo">{{ company.name }}</span>
-                    </div>
-                </el-header>
 
-                <el-main>
-                    <el-steps :active="activeStep" finish-status="success" align-center class="steps-wrap">
-                        <el-step title="Вакансия"></el-step>
-                        <el-step title="Контактные данные"></el-step>
-                        <el-step title="Видеоинтервью"></el-step>
-                    </el-steps>
+        <div v-if="vacancy.deleted" style="margin: 5rem auto 0; font-size: 24px; padding: 1rem;">
+            Вакансия была удалена или перемещена в архив
+        </div>
 
-                    <div class="step-view text-center">
-                        <slot v-if="activeStep === 0">
-                            <h1 class="text-center">Видеоинтервью на позицию {{ vacancy.position }}</h1>
+        <template v-if="vacancy.deleted === false">
+            <el-col :xs="23" :sm="23" :md="23" :lg="20" :xl="20" class="main-col">
+                <el-container>
+                    <el-header class="vacancy-header" height="120px">
+                        <div class="company-logo">
+                            <img v-if="company.logo" :src="company.logo">
+                            <span v-if="!company.logo">{{ company.name }}</span>
+                        </div>
+                    </el-header>
 
-                            <div class="vacancy-overview">
-                                <div class="vacancy-video-container">
-                                    <div class="embed-responsive">
-                                        <iframe :src="vacancy.video"
-                                                class="embed-responsive-item"
-                                                frameborder="0"
-                                                allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <el-main>
+                        <el-steps :active="activeStep" finish-status="success" align-center class="steps-wrap">
+                            <el-step title="Вакансия"></el-step>
+                            <el-step title="Контактные данные"></el-step>
+                            <el-step title="Видеоинтервью"></el-step>
+                        </el-steps>
+
+                        <div class="step-view text-center">
+                            <slot v-if="activeStep === 0">
+                                <h1 class="text-center">Видеоинтервью на позицию {{ vacancy.position }}</h1>
+
+                                <div class="vacancy-overview">
+                                    <div class="vacancy-video-container">
+                                        <div class="embed-responsive">
+                                            <iframe :src="vacancy.video"
+                                                    class="embed-responsive-item"
+                                                    frameborder="0"
+                                                    allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                        </div>
                                     </div>
+
+
+                                    <p class="vacancy-description" v-html="vacancy.description"></p>
                                 </div>
 
+                                <el-button type="primary" @click="nextStep">Продолжить</el-button>
+                            </slot>
 
-                                <p class="vacancy-description" v-html="vacancy.description"></p>
-                            </div>
+                            <slot v-if="activeStep === 1">
 
-                            <el-button type="primary" @click="nextStep">Продолжить</el-button>
-                        </slot>
+                                <div class="text-center form-description">
+                                    Введите контактные данные, чтобы мы могли<br> с вами связаться и сообщить о результатах
+                                    интервью
+                                </div>
 
-                        <slot v-if="activeStep === 1">
-
-                            <div class="text-center form-description">
-                                Введите контактные данные, чтобы мы могли<br> с вами связаться и сообщить о результатах
-                                интервью
-                            </div>
-
-                            <el-row type="flex" justify="center">
-                                <el-col :xs="20" :sm="16" :md="12" :lg="10" :xl="10">
-                                    <el-form ref="form" :model="form" label-width="90px" label-position="left">
-                                        <el-form-item label="Имя"
-                                                      prop="name"
-                                                      :rules="[{ required: true, message: 'Введите имя', trigger: 'blur' }]">
-                                            <el-input v-model="form.name"></el-input>
-                                        </el-form-item>
-                                        <el-form-item label="Фамилия"
-                                                      prop="lastName"
-                                                      :rules="[{ required: true, message: 'Введите фамилию', trigger: 'blur' }]">
-                                            <el-input v-model="form.lastName"></el-input>
-                                        </el-form-item>
-                                        <el-form-item label="Телефон"
-                                                      prop="phone"
-                                                      :rules="[{ required: false, message: 'Введите телефон', trigger: 'blur' }]">
-                                            <el-input v-model="form.phone"></el-input>
-                                        </el-form-item>
-                                        <el-form-item prop="email"
-                                                      type="email"
-                                                      label="Email"
-                                                      :rules="[
+                                <el-row type="flex" justify="center">
+                                    <el-col :xs="20" :sm="16" :md="12" :lg="10" :xl="10">
+                                        <el-form ref="form" :model="form" label-width="90px" label-position="left">
+                                            <el-form-item label="Имя"
+                                                          prop="name"
+                                                          :rules="[{ required: true, message: 'Введите имя', trigger: 'blur' }]">
+                                                <el-input v-model="form.name"></el-input>
+                                            </el-form-item>
+                                            <el-form-item label="Фамилия"
+                                                          prop="lastName"
+                                                          :rules="[{ required: true, message: 'Введите фамилию', trigger: 'blur' }]">
+                                                <el-input v-model="form.lastName"></el-input>
+                                            </el-form-item>
+                                            <el-form-item label="Телефон"
+                                                          prop="phone"
+                                                          :rules="[{ required: false, message: 'Введите телефон', trigger: 'blur' }]">
+                                                <el-input v-model="form.phone"></el-input>
+                                            </el-form-item>
+                                            <el-form-item prop="email"
+                                                          type="email"
+                                                          label="Email"
+                                                          :rules="[
                                                       { required: true, message: 'Введите email', trigger: 'blur' },
                                                       { type: 'email', message: 'Email невалиден', trigger: ['blur', 'change'] }
                                                     ]">
-                                            <el-input type="email" v-model="form.email"></el-input>
-                                        </el-form-item>
+                                                <el-input type="email" v-model="form.email"></el-input>
+                                            </el-form-item>
 
-                                        <br>
-                                        <el-button type="primary" @click="sendForm">Продолжить</el-button>
-                                    </el-form>
-                                </el-col>
-                            </el-row>
+                                            <br>
+                                            <el-button type="primary" @click="sendForm">Продолжить</el-button>
+                                        </el-form>
+                                    </el-col>
+                                </el-row>
 
-                        </slot>
+                            </slot>
 
 
-                        <div class="respond-wrap" v-if="activeStep === 2">
-                            <Questionnaire v-on:response-finished="nextStep"
-                                           :questions="questions"
-                                           :respondQuestions="respond.respondQuestions"
-                                           :respondId="respond.id"></Questionnaire>
+                            <div class="respond-wrap" v-if="activeStep === 2">
+                                <Questionnaire v-on:response-finished="nextStep"
+                                               :questions="questions"
+                                               :respondQuestions="respond.respondQuestions"
+                                               :respondId="respond.id"></Questionnaire>
+                            </div>
+
+                            <div v-if="activeStep === 3" class="finish-wrap">
+                                <div class="finished-title">Спасибо за интервью!</div>
+                                Мы свяжемся с вами в скором времени.
+                                <br>
+                                <br>
+                            </div>
                         </div>
-
-                        <div v-if="activeStep === 3" class="finish-wrap">
-                            <div class="finished-title">Спасибо за интервью!</div>
-                            Мы свяжемся с вами в скором времени.
-                            <br>
-                            <br>
-                        </div>
-                    </div>
-                </el-main>
-            </el-container>
-        </el-col>
+                    </el-main>
+                </el-container>
+            </el-col>
+        </template>
     </el-row>
 </template>
 
