@@ -3,8 +3,7 @@ import axios from 'axios';
 const BACKEND_URL = 'https://nexign.vi-hr.com:8080';
 
 const http = axios.create({
-  baseURL: `${BACKEND_URL}/api/v1`,
-  timeout: 5000
+  baseURL: `${BACKEND_URL}/api/v1`
 });
 
 export const Vacancies = (() => {

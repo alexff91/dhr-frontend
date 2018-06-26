@@ -146,27 +146,30 @@
 
         this.recordTimeout = setTimeout(() => {
           this.stopRecording();
-
         }, this.durationMax);
       },
 
       stopRecording() {
+        console.log('recorder.state before stop', this.recorder.state);
+
         this.recordInterval = clearInterval(this.recordInterval);
         this.recordTimeout = clearTimeout(this.recordTimeout);
 
-        this.recorder.stop().then(() => {
-          this.isRecording = false;
-          // this.$refs['video-recorder'].innerHTML = '';
-          // this.showPreview();
-          this.savingInProgress = true;
-          this.saveRecord()
-            .then(() => {
-              console.log('saved');
-              this.savingInProgress = false;
-              this.recorder.clean();
-              this.$emit('recording-finished');
-            });
-        });
+        this.recorder.stop()
+          .then(() => {
+            console.log('recorder.state after stop', this.recorder.state);
+            this.isRecording = false;
+            // this.$refs['video-recorder'].innerHTML = '';
+            // this.showPreview();
+            this.savingInProgress = true;
+            this.saveRecord()
+              .then(() => {
+                console.log('saved');
+                this.savingInProgress = false;
+                this.recorder.clean();
+                this.$emit('recording-finished');
+              });
+          });
       },
 
       saveRecord() {
