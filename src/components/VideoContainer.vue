@@ -124,7 +124,10 @@
           insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
           mirror: false       	// Whether to mirror your local video or not
         }, () => {
-          this.$refs['video-recorder'].querySelector('video').setAttribute('playsinline', '');
+          const videoEl = this.$refs['video-recorder'].querySelector('video');
+          if (videoEl) {
+            videoEl.setAttribute('playsinline', '');
+          }
         });
       },
       initRecorder() {
