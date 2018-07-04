@@ -37,7 +37,7 @@
                 <span>Начать запись ({{ readableDuration(durationMax) }})</span>
             </el-button>
 
-            <el-button class="record-button" v-if="isRecording && readyToRecord" @click="stopRecording" type="danger">
+            <el-button class="record-button" v-if="isRecording && readyToRecord && readyToStop" @click="stopRecording" type="danger">
                 <i class="icon">
                     <svg width="22" height="22" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
                         <g fill="none" fill-rule="evenodd">
@@ -88,7 +88,8 @@
         recordInterval: null,
         isRecording: false,
         savingInProgress: false,
-        timeLeft: 0
+        timeLeft: 0,
+        readyToStop: false
       };
     },
 
@@ -97,19 +98,13 @@
       this.initPublisher();
       this.initRecorder();
     },
-
-    created() {
-      console.log('video container created');
-    },
     beforeDestroy() {
-      console.log('video container beforeDestroy');
       this.recorder.clean();
 
       const streamTracks = this.publisher.stream.getMediaStream().getTracks();
       streamTracks.forEach(track => {
         track.stop();
       });
-
     },
 
     methods: {
@@ -143,6 +138,10 @@
         this.timeLeft = this.durationMax;
         this.$emit('recording-started');
 
+        setTimeout(() => {
+          this.readyToStop = true;
+        }, 5000);
+
         this.recordInterval = setInterval(() => {
           this.timeLeft -= 1000;
         }, 1000);
@@ -154,7 +153,7 @@
 
       stopRecording() {
         console.log('recorder.state before stop', this.recorder.state);
-
+        this.readyToStop = false;
         this.recordInterval = clearInterval(this.recordInterval);
         this.recordTimeout = clearTimeout(this.recordTimeout);
 
@@ -167,7 +166,6 @@
             this.savingInProgress = true;
             this.saveRecord()
               .then(() => {
-                console.log('saved');
                 this.savingInProgress = false;
                 this.recorder.clean();
                 this.$emit('recording-finished');

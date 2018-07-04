@@ -41,7 +41,6 @@
                     <!--v-if="isQuestionAnswered"-->
                 </div>
 
-
                 <VideoContainer :durationMax="currentQuestion.durationMax"
                                 :questionId="currentQuestion.id"
                                 :respondId="respondId"
@@ -57,7 +56,6 @@
 </template>
 
 <script>
-
   import { parseMillisecondsIntoReadableTime } from '../utils';
   import VideoContainer from './VideoContainer';
 
@@ -138,6 +136,10 @@
         this.timeToReadInterval = setInterval(() => {
           this.durationToReadLeft -= 1000;
         }, 1000);
+
+        if (this.currentQuestion.durationToRead === 0) {
+          this.startRecorder = true;
+        }
 
         this.timeToReadTimeout = setTimeout(() => {
           this.timeToReadInterval = clearInterval(this.timeToReadInterval);
