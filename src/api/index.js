@@ -35,3 +35,13 @@ export const Responds = (() => {
     createRespond
   };
 })();
+
+export const RespondentFeedback = (() => {
+  const post = (respondId, data) => {
+    return http.post(`/respondentFeedback/${respondId}`, data);
+  };
+
+  return {
+    post
+  };
+})();

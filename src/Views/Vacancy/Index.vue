@@ -100,8 +100,34 @@
                             <div v-if="activeStep === 3" class="finish-wrap">
                                 <div class="finished-title">Спасибо за интервью!</div>
                                 Мы свяжемся с вами в скором времени.
-                                <br>
-                                <br>
+
+                                <div class="feedback-wrap">
+                                    <h5>Оцените как прошло интервью</h5>
+
+                                    <div class="description">
+                                        Ваше мнение важно для нас. Оценка анонимна.
+                                    </div>
+
+                                    <label class="feedback-option">
+                                        <input type="radio" name="some" value="😕" v-model="feedbackPicked" @change="feedbackChange">
+                                        <span class="emoji">😕</span>
+                                    </label>
+                                    <label class="feedback-option">
+                                        <input type="radio" name="some" value="🙂" v-model="feedbackPicked" @change="feedbackChange">
+                                        <span class="emoji">🙂</span>
+                                    </label>
+                                    <label class="feedback-option">
+                                        <input type="radio" name="some" value="😍" v-model="feedbackPicked" @change="feedbackChange">
+                                        <span class="emoji">😍</span>
+                                    </label>
+
+                                    <div class="feedback-sent" v-if="feedbackSent">
+                                        Спасибо!
+                                    </div>
+                                    <div class="feedback-sent" v-if="!feedbackSent">
+                                        &nbsp;
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </el-main>
@@ -113,7 +139,7 @@
 
 <script>
   import VideoContainer from '../../components/VideoContainer';
-  import { Responds, Vacancies } from '../../api';
+  import { RespondentFeedback, Responds, Vacancies } from '../../api';
   import Questionnaire from '../../components/Questionnaire';
 
   export default {
@@ -131,7 +157,9 @@
         vacancy: {},
         company: {},
         questions: [],
-        respond: {}
+        respond: {},
+        feedbackPicked: null,
+        feedbackSent: false
       };
     },
     computed: {
@@ -174,6 +202,16 @@
               });
           }
         });
+      },
+      feedbackChange(e) {
+        RespondentFeedback.post(this.respond.id, {emoji: e.target.value})
+          .then(() => {
+            this.feedbackSent = true;
+
+            setTimeout(() => {
+              this.feedbackSent = false;
+            }, 3000);
+          });
       }
     }
   };
@@ -276,5 +314,56 @@
     .privacy-description {
         font-size: 13px;
         margin-bottom: 1rem;
+    }
+
+    .feedback-wrap {
+        margin-top: 5rem;
+
+        h5 {
+            margin-bottom: .5rem;
+            font-size: 16px;
+        }
+
+        .description {
+            margin-bottom: .5rem;
+            font-size: 14px;
+            color: #6e6e6e;
+        }
+
+        .feedback-sent {
+            color: green;
+            font-size: 12px;
+        }
+    }
+
+    .feedback-option {
+        user-select: none;
+
+        &:not(:last-of-type) {
+            margin-right: 1rem;
+        }
+
+        input {
+            display: none;
+
+            + * {
+                filter: grayscale(1);
+
+                &:hover {
+                    filter: grayscale(.2);
+                }
+            }
+
+            &:checked + * {
+                opacity: 1;
+                filter: grayscale(0);
+
+            }
+        }
+
+        .emoji {
+            font-size: 50px;
+            cursor: pointer;
+        }
     }
 </style>
