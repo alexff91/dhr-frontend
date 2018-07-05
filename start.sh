@@ -6,3 +6,4 @@ docker run --name=front --privileged=true  front
 docker cp front:/usr/src/app/dist /tmp 
 mkdir -p /var/www/demo
 cp -Rf /tmp/dist/* /var/www/demo/
+echo hello
