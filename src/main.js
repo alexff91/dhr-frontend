@@ -2,8 +2,9 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
+import VueYandexMetrika from 'vue-yandex-metrika';
 import VueAnalytics from 'vue-analytics';
-import { Container, Header, Main, Row, Col, Steps, Step, Form, FormItem, Input, Button } from 'element-ui';
+import { Button, Col, Container, Form, FormItem, Header, Input, Main, Row, Step, Steps } from 'element-ui';
 
 import 'element-ui/lib/theme-chalk/index.css';
 import '../src/assets/styles/main.scss';
@@ -25,6 +26,16 @@ Vue.config.productionTip = false;
 Vue.use(VueAnalytics, {
   id: 'UA-99302694-2',
   router
+});
+
+Vue.use(VueYandexMetrika, {
+  id: 49469917,
+  router: router,
+  env: process.env.NODE_ENV,
+  clickmap: true,
+  trackLinks: true,
+  accurateTrackBounce: true,
+  webvisor: true
 });
 
 new Vue({
