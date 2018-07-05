@@ -1,6 +1,5 @@
 <template>
     <el-row type="flex" justify="center">
-
         <div v-if="vacancy.deleted" style="margin: 5rem auto 0; font-size: 24px; padding: 1rem;">
             Вакансия была удалена или перемещена в архив
         </div>
@@ -166,9 +165,13 @@
             })
               .then(res => {
                 this.respond = res.data;
-              });
 
-            this.activeStep++;
+                if (this.respond.status === 'COMPLETE') {
+                  this.activeStep = 3;
+                } else {
+                  this.activeStep++;
+                }
+              });
           }
         });
       }
