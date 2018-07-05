@@ -79,6 +79,10 @@
                                             </el-form-item>
 
                                             <br>
+                                            <div class="privacy-description">
+                                                Нажимая "Продолжить" вы соглашаетесь с
+                                                <a href="https://www.vi-hr.com/policy" target="_blank">обработкой персональных данных</a>
+                                            </div>
                                             <el-button type="primary" @click="sendForm">Продолжить</el-button>
                                         </el-form>
                                     </el-col>
@@ -264,5 +268,10 @@
                 padding-right: 0;
             }
         }
+    }
+
+    .privacy-description {
+        font-size: 13px;
+        margin-bottom: 1rem;
     }
 </style>
