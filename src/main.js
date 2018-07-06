@@ -32,10 +32,12 @@ Vue.use(VueYandexMetrika, {
   id: 49469917,
   router: router,
   env: process.env.NODE_ENV,
-  clickmap: true,
-  trackLinks: true,
-  accurateTrackBounce: true,
-  webvisor: true
+  options: {
+    clickmap: true,
+    trackLinks: true,
+    accurateTrackBounce: true,
+    webvisor: true
+  }
 });
 
 new Vue({
