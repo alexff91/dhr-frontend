@@ -178,9 +178,17 @@
     },
     methods: {
       nextStep() {
+        if (this.activeStep === 0) {
+          this.$metrika.reachGoal('TO_FORM');
+        }
+        if (this.activeStep === 2) {
+          this.$metrika.reachGoal('END_INTERVIEW');
+        }
         this.activeStep++;
       },
       sendForm() {
+        this.$metrika.reachGoal('INTERVIEW_START');
+
         this.$refs['form'].validate((valid) => {
           if (valid) {
             const formModel = this.$refs['form'].model;
@@ -196,6 +204,7 @@
 
                 if (this.respond.status === 'COMPLETE') {
                   this.activeStep = 3;
+                  this.$metrika.reachGoal('END_INTERVIEW');
                 } else {
                   this.activeStep++;
                 }
