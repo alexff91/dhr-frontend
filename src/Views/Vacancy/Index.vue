@@ -109,16 +109,16 @@
                                     </div>
 
                                     <label class="feedback-option">
-                                        <input type="radio" name="some" value="😕" v-model="feedbackPicked" @change="feedbackChange">
-                                        <span class="emoji">😕</span>
+                                        <input type="radio" name="some" value="disappointed" v-model="feedbackPicked" @change="feedbackChange">
+                                        <img src="../../assets/img/emoji_disappointed.png" class="emoji">
                                     </label>
                                     <label class="feedback-option">
-                                        <input type="radio" name="some" value="🙂" v-model="feedbackPicked" @change="feedbackChange">
-                                        <span class="emoji">🙂</span>
+                                        <input type="radio" name="some" value="smile" v-model="feedbackPicked" @change="feedbackChange">
+                                        <img src="../../assets/img/emoji_smile.png" class="emoji">
                                     </label>
                                     <label class="feedback-option">
-                                        <input type="radio" name="some" value="😍" v-model="feedbackPicked" @change="feedbackChange">
-                                        <span class="emoji">😍</span>
+                                        <input type="radio" name="some" value="inlove" v-model="feedbackPicked" @change="feedbackChange">
+                                        <img src="../../assets/img/emoji_inlove.png" class="emoji">
                                     </label>
 
                                     <div class="feedback-sent" v-if="feedbackSent">
@@ -379,7 +379,8 @@
         }
 
         .emoji {
-            font-size: 50px;
+            width: 48px;
+            height: 48px;
             cursor: pointer;
         }
     }
