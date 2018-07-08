@@ -15,11 +15,11 @@
                     </el-header>
 
                     <el-main>
-                        <el-steps :active="activeStep" finish-status="success" align-center class="steps-wrap">
-                            <el-step title="Вакансия"></el-step>
-                            <el-step title="Контактные данные"></el-step>
-                            <el-step title="Видеоинтервью"></el-step>
-                        </el-steps>
+                        <!--<el-steps :active="activeStep" finish-status="success" align-center class="steps-wrap">-->
+                        <!--<el-step title="Вакансия"></el-step>-->
+                        <!--<el-step title="Контактные данные"></el-step>-->
+                        <!--<el-step title="Видеоинтервью"></el-step>-->
+                        <!--</el-steps>-->
 
                         <div class="step-view text-center">
                             <slot v-if="activeStep === 0">
@@ -179,15 +179,21 @@
     methods: {
       nextStep() {
         if (this.activeStep === 0) {
-          this.$metrika.reachGoal('TO_FORM');
+          if (this.$metrika) {
+            this.$metrika.reachGoal('TO_FORM');
+          }
         }
         if (this.activeStep === 2) {
-          this.$metrika.reachGoal('END_INTERVIEW');
+          if (this.$metrika) {
+            this.$metrika.reachGoal('END_INTERVIEW');
+          }
         }
         this.activeStep++;
       },
       sendForm() {
-        this.$metrika.reachGoal('INTERVIEW_START');
+        if (this.$metrika) {
+          this.$metrika.reachGoal('INTERVIEW_START');
+        }
 
         this.$refs['form'].validate((valid) => {
           if (valid) {
@@ -204,7 +210,9 @@
 
                 if (this.respond.status === 'COMPLETE') {
                   this.activeStep = 3;
-                  this.$metrika.reachGoal('END_INTERVIEW');
+                  if (this.$metrika) {
+                    this.$metrika.reachGoal('END_INTERVIEW');
+                  }
                 } else {
                   this.activeStep++;
                 }
