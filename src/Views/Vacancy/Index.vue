@@ -103,11 +103,15 @@
                                         <p>Скачайте последнюю версию одного из этих браузеров</p>
                                         <a href="https://www.mozilla.org/ru/firefox/new/" title="Скачать Firefox" class="browser-block">
                                             <img src="../../assets/img/logo_firefox.svg" class="browser-logo">
-                                            <span class="browser-name">Mozilla Firefox 29+</span>
+                                            <span class="browser-name">Mozilla Firefox</span>
                                         </a>
                                         <a href="https://www.google.com/chrome/" title="Скачать Chrome" class="browser-block">
                                             <img src="../../assets/img/logo_chrome.svg" class="browser-logo">
-                                            <span class="browser-name">Google Chrome 49+</span>
+                                            <span class="browser-name">Google Chrome</span>
+                                        </a>
+                                        <a href="https://browser.yandex.ru/" title="Скачать Яндекс Браузер" class="browser-block">
+                                            <img src="../../assets/img/logo_yandex_browser.svg" class="browser-logo">
+                                            <span class="browser-name">Яндекс Браузер</span>
                                         </a>
                                     </div>
 
