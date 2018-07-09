@@ -90,7 +90,7 @@
 
 
                             <div class="respond-wrap" v-if="activeStep === 2">
-                                <Questionnaire v-if="isMediaRecorderSupported"
+                                <Questionnaire v-if="isMediaRecorderSupported()"
                                                v-on:response-finished="nextStep"
                                                :questions="questions"
                                                :respondQuestions="respond.respondQuestions"
