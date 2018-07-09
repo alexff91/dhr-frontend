@@ -1,6 +1,6 @@
 <template>
     <el-row type="flex" justify="center">
-        <div v-if="vacancy.deleted" style="margin: 5rem auto 0; font-size: 24px; padding: 1rem;">
+        <div v-if="vacancy.deleted" class="vacancy-is-deleted">
             Вакансия была удалена или перемещена в архив
         </div>
 
@@ -86,46 +86,78 @@
                                         </el-form>
                                     </el-col>
                                 </el-row>
-
                             </slot>
 
 
                             <div class="respond-wrap" v-if="activeStep === 2">
-                                <Questionnaire v-on:response-finished="nextStep"
+                                <Questionnaire v-if="isMediaRecorderSupported"
+                                               v-on:response-finished="nextStep"
                                                :questions="questions"
                                                :respondQuestions="respond.respondQuestions"
                                                :respondId="respond.id"></Questionnaire>
+
+                                <div v-if="!isMediaRecorderSupported()" class="not-supported-wrap">
+                                    <h4>К сожалению, ваш браузер не поддерживается, но мы работаем над этим</h4>
+
+                                    <div v-if="!isMobileOrTablet()">
+                                        <p>Скачайте последнюю версию одного из этих браузеров</p>
+                                        <a href="https://www.mozilla.org/ru/firefox/new/" title="Скачать Firefox" class="browser-block">
+                                            <img src="../../assets/img/logo_firefox.svg" class="browser-logo">
+                                            <span class="browser-name">Mozilla Firefox 29+</span>
+                                        </a>
+                                        <a href="https://www.google.com/chrome/" title="Скачать Chrome" class="browser-block">
+                                            <img src="../../assets/img/logo_chrome.svg" class="browser-logo">
+                                            <span class="browser-name">Google Chrome 49+</span>
+                                        </a>
+                                    </div>
+
+                                    <div v-if="isMobileOrTablet()">
+                                        Используйте стационарный компьютер или ноутбук для записи интервью.
+                                        <br>
+                                        <br>
+                                    </div>
+                                </div>
                             </div>
 
                             <div v-if="activeStep === 3" class="finish-wrap">
-                                <div class="finished-title">Спасибо за интервью!</div>
-                                Мы свяжемся с вами в скором времени.
 
-                                <div class="feedback-wrap">
-                                    <h5>Оцените как прошло интервью</h5>
+                                <div v-if="alreadyCompleted">
+                                    <div class="finished-title">Вы уже ответили на эту вакансию</div>
+                                    Мы свяжемся с вами в скором времени.
+                                </div>
 
-                                    <div class="description">
-                                        Ваше мнение важно для нас. Оценка анонимна.
-                                    </div>
+                                <div v-if="!alreadyCompleted">
+                                    <div class="finished-title">Спасибо за интервью!</div>
+                                    Мы свяжемся с вами в скором времени.
 
-                                    <label class="feedback-option">
-                                        <input type="radio" name="some" value="disappointed" v-model="feedbackPicked" @change="feedbackChange">
-                                        <img src="../../assets/img/emoji_disappointed.png" class="emoji">
-                                    </label>
-                                    <label class="feedback-option">
-                                        <input type="radio" name="some" value="smile" v-model="feedbackPicked" @change="feedbackChange">
-                                        <img src="../../assets/img/emoji_smile.png" class="emoji">
-                                    </label>
-                                    <label class="feedback-option">
-                                        <input type="radio" name="some" value="inlove" v-model="feedbackPicked" @change="feedbackChange">
-                                        <img src="../../assets/img/emoji_inlove.png" class="emoji">
-                                    </label>
+                                    <div class="feedback-wrap">
+                                        <h5>Оцените как прошло интервью</h5>
 
-                                    <div class="feedback-sent" v-if="feedbackSent">
-                                        Спасибо!
-                                    </div>
-                                    <div class="feedback-sent" v-if="!feedbackSent">
-                                        &nbsp;
+                                        <div class="description">
+                                            Ваше мнение важно для нас. Оценка анонимна.
+                                        </div>
+
+                                        <label class="feedback-option">
+                                            <input type="radio" name="some" value="disappointed" v-model="feedbackPicked"
+                                                   @change="feedbackChange">
+                                            <img src="../../assets/img/emoji_disappointed.png" class="emoji">
+                                        </label>
+                                        <label class="feedback-option">
+                                            <input type="radio" name="some" value="smile" v-model="feedbackPicked" @change="feedbackChange">
+                                            <img src="../../assets/img/emoji_smile.png" class="emoji">
+                                        </label>
+                                        <label class="feedback-option">
+                                            <input type="radio" name="some" value="inlove" v-model="feedbackPicked"
+                                                   @change="feedbackChange">
+                                            <img src="../../assets/img/emoji_inlove.png" class="emoji">
+                                        </label>
+
+                                        <div class="feedback-sent" v-if="feedbackSent">
+                                            Спасибо!
+                                        </div>
+                                        <div class="feedback-sent" v-if="!feedbackSent">
+                                            &nbsp;
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -141,6 +173,7 @@
   import VideoContainer from '../../components/VideoContainer';
   import { RespondentFeedback, Responds, Vacancies } from '../../api';
   import Questionnaire from '../../components/Questionnaire';
+  import { isMediaRecorderSupported, isMobileOrTablet } from '../../utils';
 
   export default {
     name: 'Index',
@@ -159,7 +192,10 @@
         questions: [],
         respond: {},
         feedbackPicked: null,
-        feedbackSent: false
+        feedbackSent: false,
+        alreadyCompleted: false,
+        isMediaRecorderSupported,
+        isMobileOrTablet
       };
     },
     computed: {
@@ -209,6 +245,7 @@
                 this.respond = res.data;
 
                 if (this.respond.status === 'COMPLETE') {
+                  this.alreadyCompleted = true;
                   this.activeStep = 3;
                   if (this.$metrika) {
                     this.$metrika.reachGoal('END_INTERVIEW');
@@ -383,5 +420,43 @@
             height: 48px;
             cursor: pointer;
         }
+    }
+
+    .not-supported-wrap {
+        .browser-block {
+            display: inline-block;
+            text-decoration: none;
+            color: #6e6e6e;
+            font-weight: bold;
+            font-size: 13px;
+            padding-right: 1rem;
+            margin-right: 1rem;
+            border-right: 1px solid #e9e9e9;
+
+            &:last-of-type {
+                margin-right: 0;
+                padding-right: 0;
+                border-right: 0;
+            }
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .browser-name {
+            display: block;
+        }
+
+        .browser-logo {
+            width: 48px;
+            height: 48px;
+        }
+    }
+
+    .vacancy-is-deleted {
+        margin: 5rem auto 0;
+        font-size: 24px;
+        padding: 1rem;
     }
 </style>
