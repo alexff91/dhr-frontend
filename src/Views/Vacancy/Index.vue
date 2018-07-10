@@ -39,13 +39,33 @@
                                     <p class="vacancy-description" v-html="vacancy.description"></p>
                                 </div>
 
-                                <el-button type="primary" @click="nextStep">Продолжить</el-button>
+                                <h4>Пройти собеседование</h4>
+                                <a href="https://telegram.me/ViHrBot" title="Чат-бот в телеграме"
+                                   class="feedback-option">
+                                    <img src="../../assets/img/telegram-logo.png" class="emoji">
+                                </a>
+                                <a href="https://vk.com/im?sel=-168606176" title="Чат-бот в VK" class="feedback-option">
+                                    <img src="../../assets/img/vk-logo.png" class="emoji">
+                                </a>
+                                <!--<a href="#" title="Алиса" class="feedback-option"
+                                   style="filter: grayscale(50%); opacity: 0.5;">
+                                    <img src="../../assets/img/logo-sb.png" class="emoji">
+                                </a>
+                                <a href="#" title="Чат-бот в Facebook" class="feedback-option"
+                                   style="filter: grayscale(50%); opacity: 0.5;">
+                                    <img src="../../assets/img/fb-logo.png" class="emoji">
+                                </a>-->
+                                <a class="feedback-option" @click="nextStep"
+                                   title="Продолжить">
+                                    <img src="../../assets/img/edit-logo.png" class="emoji">
+                                </a>
                             </slot>
 
                             <slot v-if="activeStep === 1">
 
                                 <div class="text-center form-description">
-                                    Введите контактные данные, чтобы мы могли<br> с вами связаться и сообщить о результатах
+                                    Введите контактные данные, чтобы мы могли<br> с вами связаться и сообщить о
+                                    результатах
                                     интервью
                                 </div>
 
@@ -80,8 +100,10 @@
                                             <br>
                                             <div class="privacy-description">
                                                 Нажимая "Продолжить" вы соглашаетесь с
-                                                <a href="https://www.vi-hr.com/policy" target="_blank">обработкой персональных данных</a>
+                                                <a href="https://www.vi-hr.com/policy" target="_blank">обработкой
+                                                    персональных данных</a>
                                             </div>
+
                                             <el-button type="primary" @click="sendForm">Продолжить</el-button>
                                         </el-form>
                                     </el-col>
@@ -101,15 +123,18 @@
 
                                     <div v-if="!isMobileOrTablet()">
                                         <p>Скачайте последнюю версию одного из этих браузеров</p>
-                                        <a href="https://www.mozilla.org/ru/firefox/new/" title="Скачать Firefox" class="browser-block">
+                                        <a href="https://www.mozilla.org/ru/firefox/new/" title="Скачать Firefox"
+                                           class="browser-block">
                                             <img src="../../assets/img/logo_firefox.svg" class="browser-logo">
                                             <span class="browser-name">Mozilla Firefox</span>
                                         </a>
-                                        <a href="https://www.google.com/chrome/" title="Скачать Chrome" class="browser-block">
+                                        <a href="https://www.google.com/chrome/" title="Скачать Chrome"
+                                           class="browser-block">
                                             <img src="../../assets/img/logo_chrome.svg" class="browser-logo">
                                             <span class="browser-name">Google Chrome</span>
                                         </a>
-                                        <a href="https://browser.yandex.ru/" title="Скачать Яндекс Браузер" class="browser-block">
+                                        <a href="https://browser.yandex.ru/" title="Скачать Яндекс Браузер"
+                                           class="browser-block">
                                             <img src="../../assets/img/logo_yandex_browser.svg" class="browser-logo">
                                             <span class="browser-name">Яндекс Браузер</span>
                                         </a>
@@ -142,12 +167,14 @@
                                         </div>
 
                                         <label class="feedback-option">
-                                            <input type="radio" name="some" value="disappointed" v-model="feedbackPicked"
+                                            <input type="radio" name="some" value="disappointed"
+                                                   v-model="feedbackPicked"
                                                    @change="feedbackChange">
                                             <img src="../../assets/img/emoji_disappointed.png" class="emoji">
                                         </label>
                                         <label class="feedback-option">
-                                            <input type="radio" name="some" value="smile" v-model="feedbackPicked" @change="feedbackChange">
+                                            <input type="radio" name="some" value="smile" v-model="feedbackPicked"
+                                                   @change="feedbackChange">
                                             <img src="../../assets/img/emoji_smile.png" class="emoji">
                                         </label>
                                         <label class="feedback-option">
