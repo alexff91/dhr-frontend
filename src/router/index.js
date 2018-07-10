@@ -9,7 +9,7 @@ const router = new Router({
 
   routes: [
     {
-      path: '/:vacancyId',
+      path: '/:vacancyId/:respondId?',
       component: Vacancy
     }
   ]

@@ -115,7 +115,6 @@
                                 <Questionnaire v-if="isMediaRecorderSupported()"
                                                v-on:response-finished="nextStep"
                                                :questions="questions"
-                                               :respondQuestions="respond.respondQuestions"
                                                :respondId="respond.id"></Questionnaire>
 
                                 <div v-if="!isMediaRecorderSupported()" class="not-supported-wrap">
@@ -241,6 +240,11 @@
           this.questions = res.data.questions.sort((a, b) => a.orderNumber - b.orderNumber);
           document.title = `${this.vacancy.position} в компанию ${this.vacancy.company.name}`;
           this.company = this.vacancy.company;
+
+          if (this.$route.params.respondId) {
+            this.respond.id = this.$route.params.respondId;
+            this.activeStep = 2;
+          }
         });
     },
     methods: {
