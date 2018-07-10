@@ -11,8 +11,13 @@ export const Vacancies = (() => {
     return http.get(`/vacancies/${vacancyId}`);
   };
 
+  const getRespondById = (vacancyId, respondId) => {
+    return http.get(`/vacancies/${vacancyId}/respond/${respondId}`);
+  };
+
   return {
-    get
+    get,
+    getRespondById
   };
 })();
 
