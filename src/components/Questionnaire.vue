@@ -32,24 +32,19 @@
                         <p>{{ currentQuestion.question }}</p>
                     </div>
 
-
                     <div class="autorecord-info" v-if="isDurationCounterVisible && timeToReadInterval">
                         Запись начнется автоматически через {{ readableDuration(durationToReadLeft) }}
                     </div>
-
-                    <!--<el-button @click="setQuestionIndex(currentQuestionIndex+1)">Следующий вопрос</el-button>-->
-                    <!--v-if="isQuestionAnswered"-->
                 </div>
 
                 <VideoContainer :durationMax="currentQuestion.durationMax"
                                 :questionId="currentQuestion.id"
                                 :respondId="respondId"
-                                :startRecorder="startRecorder"
+                                :forceRecord="forceRecord"
                                 :readyToRecord="!isQuestionHidden"
                                 v-on:recording-finished="setQuestionIndex(currentQuestionIndex+1)"
                                 v-on:recording-started="isDurationCounterVisible = false"
                 ></VideoContainer>
-
             </div>
         </div>
     </div>
@@ -85,7 +80,7 @@
         currentQuestion: {},
         isQuestionHidden: true,
         isDurationCounterVisible: true,
-        startRecorder: false,
+        forceRecord: false,
         timeToReadInterval: null,
         timeToReadTimeout: null,
         durationToReadLeft: 0
@@ -94,25 +89,25 @@
     computed: {
       currentQuestionIndex() {
         return this.questions.indexOf(this.currentQuestion);
-      },
-      isQuestionAnswered() {
-        return this.respondQuestions.includes(this.currentQuestion);
       }
-      // isQuestionHidden() {
-      //   return !!this.currentQuestion.durationToRead;
-      // }
     },
     methods: {
       initQuestionState() {
         this.durationToReadLeft = 0;
         this.isQuestionHidden = true;
         this.isDurationCounterVisible = true;
-        this.startRecorder = false;
+        this.forceRecord = false;
         this.timeToReadInterval = clearInterval(this.timeToReadInterval);
         this.timeToReadTimeout = clearTimeout(this.timeToReadTimeout);
 
-        if (this.isQuestionAnswered || !this.currentQuestion.durationToRead) {
+        if (!this.currentQuestion.durationToRead) { // this.isQuestionAnswered ||
           this.isQuestionHidden = false;
+        }
+
+        if (this.currentQuestion.durationToRead === 0) {
+          this.$nextTick(() => {
+            this.forceRecord = true;
+          });
         }
       },
 
@@ -137,14 +132,10 @@
           this.durationToReadLeft -= 1000;
         }, 1000);
 
-        if (this.currentQuestion.durationToRead === 0) {
-          this.startRecorder = true;
-        }
-
         this.timeToReadTimeout = setTimeout(() => {
           this.timeToReadInterval = clearInterval(this.timeToReadInterval);
           this.hideDurationCounter();
-          this.startRecorder = true;
+          this.forceRecord = true;
         }, this.currentQuestion.durationToRead);
       },
 

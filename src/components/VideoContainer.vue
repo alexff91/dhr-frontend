@@ -8,13 +8,13 @@
                     <path fill="none"
                           d="M24.3,30C11.4,30,5,43.3,5,50s6.4,20,19.3,20c19.3,0,32.1-40,51.4-40 C88.6,30,95,43.3,95,50s-6.4,20-19.3,20C56.4,70,43.6,30,24.3,30z"
                           stroke="#ff7c81" stroke-width="7" stroke-dasharray="159.08513549804687 97.50379272460938">
-                        <animate attributeName="stroke-dashoffset" calcMode="linear" values="0;256.58892822265625" keyTimes="0;1" dur="1"
+                        <animate attributeName="stroke-dashoffset" calcMode="linear" values="0;256.58892822265625" keyTimes="0;1"
+                                 dur="1"
                                  begin="0s" repeatCount="indefinite"></animate>
                     </path>
                 </svg>
             </div>
         </div>
-        <div ref="video-preview" class="video-container"></div>
 
         <div class="video-controls">
             <el-button class="record-button" v-if="!isRecording && readyToRecord && !savingInProgress" @click="startRecording">
@@ -73,7 +73,7 @@
       'questionId': {
         type: Number
       },
-      'startRecorder': {
+      'forceRecord': {
         type: Boolean
       },
       'readyToRecord': {
@@ -89,14 +89,18 @@
         isRecording: false,
         savingInProgress: false,
         timeLeft: 0,
-        readyToStop: false
+        readyToStop: false,
+        devicesAllowed: false
       };
     },
 
-    computed: {},
+    computed: {
+      recorderState() {
+        return this.recorder.state;
+      }
+    },
     mounted() {
       this.initPublisher();
-      this.initRecorder();
     },
     beforeDestroy() {
       this.recorder.clean();
@@ -123,11 +127,23 @@
           if (videoEl) {
             videoEl.setAttribute('playsinline', '');
           }
+
+          this.initRecorder();
+        });
+
+        // todo: device access
+        this.publisher.on('accessDenied', () => {
+          this.devicesAllowed = false;
+        });
+
+        this.publisher.on('accessAllowed', () => {
+          this.devicesAllowed = true;
         });
       },
       initRecorder() {
         this.recorder = VIDU.initLocalRecorder(this.publisher.stream);
       },
+
       readableDuration(ms) {
         return parseMillisecondsIntoReadableTime(ms);
       },
@@ -140,7 +156,7 @@
 
         setTimeout(() => {
           this.readyToStop = true;
-        }, 5000);
+        }, 1500);
 
         this.recordInterval = setInterval(() => {
           this.timeLeft -= 1000;
@@ -152,17 +168,18 @@
       },
 
       stopRecording() {
-        console.log('recorder.state before stop', this.recorder.state);
+        if (this.recorderState === 'PAUSED') {
+          console.warn('WRONG STATE! = ', this.recorderState);
+          return;
+        }
+
         this.readyToStop = false;
         this.recordInterval = clearInterval(this.recordInterval);
         this.recordTimeout = clearTimeout(this.recordTimeout);
 
         this.recorder.stop()
           .then(() => {
-            console.log('recorder.state after stop', this.recorder.state);
             this.isRecording = false;
-            // this.$refs['video-recorder'].innerHTML = '';
-            // this.showPreview();
             this.savingInProgress = true;
             this.saveRecord()
               .then(() => {
@@ -177,21 +194,20 @@
         const videoFile = new FormData();
         videoFile.append('file', this.recorder.blob, this.recorder.id + '.webm');
         return Recordings.upload(videoFile, this.respondId, this.questionId);
-      },
-
-      showPreview() {
-        const recordingPreview = this.recorder.preview(this.$refs['video-preview']);
-        recordingPreview.autoplay = false;
-        recordingPreview.controls = true;
       }
     },
     watch: {
-      startRecorder(oldValue) {
-        if (oldValue && !this.isRecording) {
-          this.startRecording();
+      forceRecord(newVal, oldVal) {
+        console.log('FORCE RECORD:', newVal, oldVal, 'state:', this.recorder.state);
+        if (newVal && !this.isRecording) {
+          if (this.recorder && (this.recorder.state !== 'READY' || this.recorder.state !== 'PAUSED')) {
+            this.publisher.once('streamPlaying', () => {
+              this.startRecording();
+            });
+          }
         }
       },
-      questionId(newVal, oldValue) {
+      questionId() {
         this.initRecorder();
       }
     }
