@@ -100,7 +100,7 @@
                                             <br>
                                             <div class="privacy-description">
                                                 Нажимая "Продолжить" вы соглашаетесь с
-                                                <a href="https://www.vi-hr.com/policy" target="_blank">обработкой
+                                                <a href="https://www.dhr.cloud/policy" target="_blank">обработкой
                                                     персональных данных</a>
                                             </div>
 

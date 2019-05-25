@@ -9,20 +9,20 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "element-ui": "^2.3.9",
-    "openvidu-browser": "^2.0.0",
-    "vue": "^2.5.16",
-    "vue-analytics": "^5.12.2",
-    "vue-router": "^3.0.1",
-    "vue-yandex-metrika": "^1.6.1"
+    "element-ui": "^2.8.2",
+    "openvidu-browser": "^2.9.0",
+    "vue": "^2.6.10",
+    "vue-analytics": "^5.16.4",
+    "vue-router": "^3.0.6",
+    "vue-yandex-metrika": "^1.8.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-beta.10",
-    "@vue/cli-plugin-eslint": "^3.0.0-beta.10",
-    "@vue/cli-service": "^3.0.0-beta.10",
-    "vue-template-compiler": "^2.5.13",
-    "sass-loader": "^7.0.1",
-    "node-sass": "^4.9.0"
+    "@vue/cli-plugin-babel": "^3.7.0",
+    "@vue/cli-plugin-eslint": "^3.7.0",
+    "@vue/cli-service": "^3.7.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^7.1.0",
+    "vue-template-compiler": "^2.6.10"
   },
   "babel": {
     "presets": [
