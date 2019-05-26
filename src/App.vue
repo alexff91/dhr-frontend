@@ -36,7 +36,7 @@
             font-size: 22px;
             margin-bottom: 6px;
             display: block;
-            color: #409EFF;
+            color: #8934ff;
         }
     }
 </style>
