@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dhr-frontend
+  namespace: test
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 9898
+      protocol: TCP
+  type: NodePort
+  selector:
+    app: dhr-frontend
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: dhr-frontend
+  namespace: test
+  labels:
+    app: dhr-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dhr-frontend
+  template:
+    metadata:
+      labels:
+        app: dhr-frontend
+    spec:
+      containers:
+      - image: registry.gitlab.com/kirill.belokon.1991/dhr-frontend:master-<VERSION>
+        name: dhr
+        ports:
+        - containerPort:  9898
+      imagePullSecrets:
+      - name: gitlab
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: dhr-frontend
+  namespace: test
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  tls:
+  - hosts:
+    - vacancies.dhr.cloud
+    secretName: example-com-tls-prod
+  rules:
+  - host: vacancies.dhr.cloud
+    http:
+       paths:
+       - path: /?(.*)
+         backend:
+           serviceName: dhr-frontend
+           servicePort: 80
