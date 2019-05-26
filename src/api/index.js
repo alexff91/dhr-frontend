@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BACKEND_URL = 'http://localhost:8080';
+const BACKEND_URL = 'https://backend.dhr.cloud';
 
 const http = axios.create({
   baseURL: `${BACKEND_URL}/api/v1`
